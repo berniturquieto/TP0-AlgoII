@@ -41,7 +41,7 @@ public:
 	Complejo & operator = (const Complejo &); // Operador =
 
 	// FUNCIONES
-	Complejo exponencial (const Complejo &);
+	Complejo exponencial ();
 
 
 private:

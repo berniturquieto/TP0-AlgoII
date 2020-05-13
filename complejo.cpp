@@ -1,5 +1,5 @@
-#include<iostream>
-#include "complejo.h"
+#include <iostream>
+#include "Complejo.h"
 #include <math.h>
 
 using namespace std;
@@ -17,7 +17,7 @@ Complejo::Complejo(const double arg_real, const double arg_img){
 }
 
 // Constructor por copia, simplemente copia los dos valores de un complejo a otro
-Complejo::Complejo(const complejo & arg_complejo){
+Complejo::Complejo(const Complejo & arg_complejo){
 	real = arg_complejo.real;
 	img = arg_complejo.img;
 }
@@ -67,14 +67,14 @@ Complejo Complejo::conjugar (){
 }
 
 // Operador SUMA
-Complejo Complejo::operator + (const complejo & complejo_a_sumar){
+Complejo Complejo::operator + (const Complejo & complejo_a_sumar){
 	Complejo aux;
 	aux.real = (this->real) + complejo_a_sumar.real;
 	aux.img = (this->img) + complejo_a_sumar.img;
 	return aux;
 }
 
-Complejo complejo::operator + (const double & double_a_sumar){
+Complejo Complejo::operator + (const double & double_a_sumar){
 	Complejo aux;
 	aux.real = (this->real) + double_a_sumar;
 	aux.img = (this->img);
@@ -141,13 +141,17 @@ Complejo & Complejo::operator = (const Complejo & complejo_a_igualar){
 
  // Funciones
 
-Complejo & Complejo::exponencial(const Complejo & c){
+Complejo Complejo::exponencial(){
+
   Complejo aux;
-  double modulo = exp(c.real);
-  double angulo = c.img;
+
+  double modulo = exp(this->real);
+  double angulo = this->img;
+
   aux.real = modulo*cos(angulo);
   aux.img = modulo*sin(angulo);
-  return Complejo( );
+
+  return aux;
 }
 
 
