@@ -1,120 +1,120 @@
 #include <iostream>
-#include "Complejo.h"
+#include "complejo.h"
 #include <math.h>
 
 using namespace std;
 
 // Constructor por defecto
-Complejo::Complejo(){ 
+complejo::complejo(){ 
 	real = 0;
 	img = 0;
 }
 
 // Constructor normal, primer argumento es real, segundo es img.
-Complejo::Complejo(const double arg_real, const double arg_img){
+complejo::complejo(const double arg_real, const double arg_img){
 	real = arg_real;
 	img = arg_img;
 }
 
 // Constructor por copia, simplemente copia los dos valores de un complejo a otro
-Complejo::Complejo(const Complejo & arg_complejo){
+complejo::complejo(const complejo & arg_complejo){
 	real = arg_complejo.real;
 	img = arg_complejo.img;
 }
 
 // Destructor
-Complejo::~Complejo(){
+complejo::~complejo(){
 
 }
 
 // Setters
-void Complejo::set_real(const double arg_real){
+void complejo::set_real(const double arg_real){
 	real = arg_real;	
 }
 
-void Complejo::set_img(const double arg_img){
+void complejo::set_img(const double arg_img){
 	img = arg_img;
 }
 
 // Getters
-double Complejo::get_real(void){
+double complejo::get_real(void){
 	return real;
 }
 
-double Complejo::get_img(void){
+double complejo::get_img(void){
 	return img;
 }
 
-double Complejo::get_modulo(){
+double complejo::get_modulo(){
 	return sqrt((this->real)*(this->real) + (this->img)*(this->img));
 }
 
-double Complejo::get_angulo(){
+double complejo::get_angulo(){
 	return atan((this->img)/(this->real));
 }
 
 // Printer
-void Complejo::print_complejo(){
+void complejo::print_complejo(){
 	cout << real << "+" << img << "i" << endl;
 }
 
 // CONJUGAR
-Complejo Complejo::conjugar (){
-	Complejo aux;
+complejo complejo::conjugar (){
+	complejo aux;
 	aux.real = this->real;
 	aux.img = -(this->img);
 	return aux;
 }
 
 // Operador SUMA
-Complejo Complejo::operator + (const Complejo & complejo_a_sumar){
-	Complejo aux;
+complejo complejo::operator + (const complejo & complejo_a_sumar){
+	complejo aux;
 	aux.real = (this->real) + complejo_a_sumar.real;
 	aux.img = (this->img) + complejo_a_sumar.img;
 	return aux;
 }
 
-Complejo Complejo::operator + (const double & double_a_sumar){
-	Complejo aux;
+complejo complejo::operator + (const double & double_a_sumar){
+	complejo aux;
 	aux.real = (this->real) + double_a_sumar;
 	aux.img = (this->img);
 	return aux;
 }
 
 // Operador RESTA
-Complejo Complejo::operator - (const Complejo & complejo_a_restar){
-	Complejo aux;
+complejo complejo::operator - (const complejo & complejo_a_restar){
+	complejo aux;
 	aux.real = (this->real) - complejo_a_restar.real;
 	aux.img = (this->img) - complejo_a_restar.img;
 	return aux;
 }
 
 // Operador RESTA
-Complejo Complejo::operator - (const double & double_a_restar){
-	Complejo aux;
+complejo complejo::operator - (const double & double_a_restar){
+	complejo aux;
 	aux.real = (this->real) - double_a_restar;
 	aux.img = (this->img);
 	return aux;
 }
 
 // Operador MULTIPLICACION
-Complejo Complejo::operator * (const Complejo & A){
-	Complejo aux;
+complejo complejo::operator * (const complejo & A){
+	complejo aux;
 	aux.real = (this->real * A.real) - (this->img * A.img);
 	aux.img = (this->real * A.img) + (this->img * A.real);
 	return aux;
 }
 
-Complejo Complejo::operator * (const double & A){
-	Complejo aux;
+complejo complejo::operator * (const double & A){
+	complejo aux;
 	aux.real = (this->real * A);
 	aux.img = (this->img * A);
 	return aux;
 }
 
 // Operador DIVISION
-Complejo Complejo::operator / (const Complejo & divisor){
-	Complejo aux;
+complejo complejo::operator / (const complejo & divisor){
+	complejo aux;
 	double a = this->real;
 	double b = this->img;
 	double c = divisor.real;
@@ -125,15 +125,15 @@ Complejo Complejo::operator / (const Complejo & divisor){
 	return aux;
 }
 
-Complejo Complejo::operator / (const double & divisor){
-	Complejo aux;
+complejo complejo::operator / (const double & divisor){
+	complejo aux;
 	aux.real = this->real / divisor;
 	aux.img = this->img / divisor;
 	return aux;
 }
 
 // Operador IGUAL
-Complejo & Complejo::operator = (const Complejo & complejo_a_igualar){
+complejo & complejo::operator = (const complejo & complejo_a_igualar){
 	real=complejo_a_igualar.real;
 	img=complejo_a_igualar.img;
 	return *this;
@@ -141,9 +141,9 @@ Complejo & Complejo::operator = (const Complejo & complejo_a_igualar){
 
  // Funciones
 
-Complejo Complejo::exponencial(){
+complejo complejo::exponencial(){
 
-  Complejo aux;
+  complejo aux;
 
   double modulo = exp(this->real);
   double angulo = this->img;

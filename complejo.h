@@ -5,15 +5,15 @@
 
 using namespace std;
 
-class Complejo{
+class complejo{
 
 public:
 
 	// Constructores y destructor
-	Complejo(); // Constructor por defecto
-	Complejo(const double , const double ); // Constructor normal, usa doubles
-	Complejo(const Complejo &); // Constructor por copia, simplemente copia los dos valores de un complejo a otro
-	~Complejo(); // Destructor, no tiene que destruir nada porque no pedimos memoria
+	complejo(); // Constructor por defecto
+	complejo(const double , const double ); // Constructor normal, usa doubles
+	complejo(const complejo &); // Constructor por copia, simplemente copia los dos valores de un complejo a otro
+	~complejo(); // Destructor, no tiene que destruir nada porque no pedimos memoria
 
 	// Setters y Getters
 	void set_real(const double);
@@ -27,21 +27,21 @@ public:
 	void print_complejo();
 
 	// Transformaciones
-	Complejo conjugar (); // Conjuga el complejo
+	complejo conjugar (); // Conjuga el complejo
 
 	// Operadores
-	Complejo operator + (const Complejo &); // Suma de complejos
-	Complejo operator + (const double &);
-	Complejo operator - (const Complejo &); // Resta de complejos
-	Complejo operator - (const double &);
-	Complejo operator * (const Complejo &); // Multiplicacion de complejos
-	Complejo operator * (const double &);
-	Complejo operator / (const Complejo &); // Division de complejos
-	Complejo operator / (const double &);
-	Complejo & operator = (const Complejo &); // Operador =
+	complejo operator + (const complejo &); // Suma de complejos
+	complejo operator + (const double &);
+	complejo operator - (const complejo &); // Resta de complejos
+	complejo operator - (const double &);
+	complejo operator * (const complejo &); // Multiplicacion de complejos
+	complejo operator * (const double &);
+	complejo operator / (const complejo &); // Division de complejos
+	complejo operator / (const double &);
+	complejo & operator = (const complejo &); // Operador =
 
 	// Funciones
-	Complejo exponencial ();
+	complejo exponencial ();
 
 
 private:
