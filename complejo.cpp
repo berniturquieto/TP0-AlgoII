@@ -23,9 +23,7 @@ complejo::complejo(const complejo & arg_complejo){
 }
 
 // Destructor
-complejo::~complejo(){
-
-}
+complejo::~complejo(){}
 
 // Setters
 void complejo::set_real(const double arg_real){
@@ -55,7 +53,7 @@ double complejo::get_angulo(){
 
 // Printer
 void complejo::print_complejo(){
-	cout << real << "+" << img << "i" << endl;
+	cout << real << "+" << img << "i";
 }
 
 // CONJUGAR

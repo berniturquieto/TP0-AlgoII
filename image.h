@@ -2,6 +2,7 @@
 #define _IMAGE_H_INCLUIDO_
 
 #include <iostream>
+#include "pixel.h"
 
 using namespace std;
 
@@ -19,8 +20,8 @@ class image{
 
     // Contructores
   	image(); // Por defecto
-  	image(const int, const int, const int);
-//  image(); // COPIA HACEMOS?
+  	image(const int, const int, const int);  // Constructor por argument
+    image(); // Constructor copia
   	~image();  // Destructor
   	
 

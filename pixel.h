@@ -2,6 +2,7 @@
 #define _IMAGE_H_INCLUIDO_
 
 #include <iostream>
+#include "complejo.h"
 
 using namespace std;
 
@@ -15,15 +16,19 @@ class pixel {
 
   	pixel(); // Constructor por defecto
   	pixel(const double, const double, const int ); // Constructor real,img,color
-  	pixel(const & pixel); // Constructor copia
+  	pixel(const pixel &); // Constructor copia
   	~pixel();	// Destructor
   
+  	// Setters y Getters
   	set_color(const int);
   	set_pos(const double, const double);
   	set_pos(const complejo);
   	int get_color();
   	complejo get_pos();
 
+  	// Printer
+  	print_pixel();
+  	print_color();
   
 }
 
