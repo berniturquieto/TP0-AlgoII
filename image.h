@@ -8,14 +8,14 @@ using namespace std;
 // Lo q se me ocurre es tener dos de estas variables clase image. Una original y otra transformada.
 
 class image{
-  	private:
+  private:
 		int width;
-  		int heigth;
-  		int greyscale;
-  		pixel **matrix;
+  	int heigth;
+  	int greyscale;
+  	pixel **matrix;
 
   	// Metodos
-  		createMatrix();
+  	createMatrix();
 
 	public:
 
