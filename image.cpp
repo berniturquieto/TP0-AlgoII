@@ -44,12 +44,16 @@ image::image(int w, int h, int gs){
 
 // Destructor
 
-/*image::~image(){
-  for (int i=0,,i++){
-
+image::~image(){              // Pregunto si matrix no es nulla, si no lo es, recorro
+  if (matrix){                // cada lugar y pregunto si no es nulo. Si no es nulo 
+    for (i=0; i<width; i++){  // hago free. Despues de recorrer todo el vector de 
+      if (matrix[i]){         // matrix, hago free de matrix.
+        delete[] matrix[i];
+      }
+    }
   }
-
-}*/
+  delete[] matrix;
+}
 
 
 // Setter y getters
