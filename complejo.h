@@ -9,13 +9,13 @@ class Complejo{
 
 public:
 
-	// CONSTRUCTORES Y DESTRUCTORES
+	// Constructores y destructor
 	Complejo(); // Constructor por defecto
 	Complejo(const double , const double ); // Constructor normal, usa doubles
 	Complejo(const Complejo &); // Constructor por copia, simplemente copia los dos valores de un complejo a otro
 	~Complejo(); // Destructor, no tiene que destruir nada porque no pedimos memoria
 
-	// SETTERS Y GETTERS
+	// Setters y Getters
 	void set_real(const double);
 	void set_img(const double);
 	double get_real();
@@ -23,13 +23,13 @@ public:
 	double get_modulo();
 	double get_angulo();
 
-	// PRINTER
+	// Printer
 	void print_complejo();
 
-	// TRANSFORMACIONES
+	// Transformaciones
 	Complejo conjugar (); // Conjuga el complejo
 
-	// OPERADORES
+	// Operadores
 	Complejo operator + (const Complejo &); // Suma de complejos
 	Complejo operator + (const double &);
 	Complejo operator - (const Complejo &); // Resta de complejos
@@ -40,7 +40,7 @@ public:
 	Complejo operator / (const double &);
 	Complejo & operator = (const Complejo &); // Operador =
 
-	// FUNCIONES
+	// Funciones
 	Complejo exponencial ();
 
 

@@ -14,19 +14,14 @@ image::image(){
 }
 
 // Constructor normal
-image::image(int w, int h, int gs){
+image::image(const int w, const int h, const int gs){
 
   int max = 0;
   width = w;
   height = h;
   greyscale = gs;
 
-  if(w<h){
-     max = h;
-  }
-  else{
-    max = w;
-  }
+  if(w<h){max = h; } else{max = w;}
 
   matrix = new pixel*[max];
   for (int i = 0; i < max; i++){
@@ -34,17 +29,17 @@ image::image(int w, int h, int gs){
   }
 
   for (int i = 0, i < max, i++){
-    for (int j = 0; i < max; ++i)
-    {
+    for (int j = 0; i < max; ++i){
       matrix[i][j] = 0;
     }
   }
 }
 
+// CONSTRUCTOR COPIA HACEMOS?
+
 
 // Destructor
-
-image::~image(){              // Pregunto si matrix no es nulla, si no lo es, recorro
+image::~image(){              // Pregunto si matrix no es nula, si no lo es, recorro
   if (matrix){                // cada lugar y pregunto si no es nulo. Si no es nulo 
     for (i=0; i<width; i++){  // hago free. Despues de recorrer todo el vector de 
       if (matrix[i]){         // matrix, hago free de matrix.
@@ -58,7 +53,7 @@ image::~image(){              // Pregunto si matrix no es nulla, si no lo es, re
 
 // Setter y getters
 
-image::set_width(int A){
+image::set_width(const int A){
   width = A;
 }
 
@@ -66,7 +61,7 @@ int image::get_width(){
   return width;
 }
 
-image::set_heigth(int A){
+image::set_heigth(const int A){
   height = A;
 }
 
@@ -74,7 +69,7 @@ int image::get_height(){
   return height;
 }
 
-image::set_greyscale(int A){
+image::set_greyscale(const int A){
   greyscale = A;
 }
 
@@ -91,16 +86,6 @@ int image::get_greyscale(){
 
 */
 
-image::color2black(image & img){
+//image::color2black(image & img){
 
-}
-
-
-
-
-
-
-
-
-
-
+//}

@@ -5,7 +5,8 @@
 
 using namespace std;
 
-// Lo q se me ocurre es tener dos de estas variables clase image. Una original y otra transformada.
+// Lo q se me ocurre es tener dos de estas variables clase image, 
+// Una original y otra transformada.
 
 class image{
   private:
@@ -14,25 +15,22 @@ class image{
   	int greyscale;
   	pixel **matrix;
 
-  	// Metodos
-  	createMatrix();
-
 	public:
 
-	//Contructores
-  		image();
-  		image();
-  		image();
-  		~image();
+    // Contructores
+  	image(); // Por defecto
+  	image(const int, const int, const int);
+//  image(); // COPIA HACEMOS?
+  	~image();  // Destructor
   	
 
   	// Setters y getters
-		set_width(int);
-   		int get_width();
-    	set_heigth(int);
-    	int get_heigth();
-    	setgreyscale(int );
-    	int get_greyscale();
+		set_width(const int);
+   	int get_width();
+    set_heigth(const int);
+    int get_heigth();
+    setgreyscale(const int );
+    int get_greyscale();
 }
 
 #endif
