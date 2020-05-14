@@ -23,5 +23,4 @@ int main (){
 	c2.print_complejo();
 
 	return 0;
-
 }
