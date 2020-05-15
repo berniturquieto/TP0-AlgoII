@@ -23,13 +23,13 @@ image::image(const int w, const int h, const int gs){
 
   if(w<h){max = h; } else{max = w;}
 
-  matrix = new pixel*[max];
+  matrix = new int*[max];
   for (int i = 0; i < max; i++){
-      matrix[i] = new pixel[max];
+      matrix[i] = new int[max];
   }
 
   for (int i = 0, i < max, i++){
-    for (int j = 0; i < max; ++i){
+    for (int j = 0; i < max; ++i){  
       matrix[i][j] = 0;
     }
   }
@@ -76,16 +76,3 @@ image::set_greyscale(const int A){
 int image::get_greyscale(){
   return greyscale:
 }
-
-/*void image::createMatrix(){
-
-  this->matrix = new int*[this->height];
-  for (int i = 0; i < this->height; ++i)
-    matrix[i] = new int[this->width];
-}
-
-*/
-
-//image::color2black(image & img){
-
-//}

@@ -53,7 +53,7 @@ double complejo::get_angulo(){
 
 // Printer
 void complejo::print_complejo(){
-	cout << real << "+" << img << "i";
+	cout << real << "+" << img << "i" << endl;
 }
 
 // CONJUGAR
