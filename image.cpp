@@ -13,7 +13,7 @@ image::image(){
   matrix = NULL;
 }
 
-// Constructor normal
+// Constructor por parametro
 image::image(const int w, const int h, const int gs){
 
   int max = 0;
@@ -21,15 +21,15 @@ image::image(const int w, const int h, const int gs){
   height = h;
   greyscale = gs;
 
-  if(w<h){max = h; } else{max = w;}
+  if(w<h){max = h;} else{max = w;}
 
   matrix = new int*[max];
-  for (int i = 0; i < max; i++){
-      matrix[i] = new int[max];
-  }
+  for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
+      matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+  }                               // Por eso se pide dos veces de dimension "max"
 
   for (int i = 0, i < max, i++){
-    for (int j = 0; i < max; ++i){  
+    for (int j = 0; j < max; j++){  
       matrix[i][j] = 0;
     }
   }
@@ -39,10 +39,18 @@ image::image(const int w, const int h, const int gs){
 
 
 // Destructor
-image::~image(){              // Pregunto si matrix no es nula, si no lo es, recorro
-  if (matrix){                // cada lugar y pregunto si no es nulo. Si no es nulo 
-    for (i=0; i<width; i++){  // hago free. Despues de recorrer todo el vector de 
-      if (matrix[i]){         // matrix, hago free de matrix.
+/* Pregunto si matrix no es nula, si no lo es, 
+recorro cada lugar y pregunto si no es nulo. 
+Si no es nulo hago free. Despues de recorrer 
+todo el vector de matrix, hago free de matrix.*/
+image::~image(){ 
+  int max = 0;
+
+  if(width<height){max = height;} else{max = width;}
+
+  if (matrix){                
+    for (i=0; i<max; i++){    
+      if (matrix[i]){          
         delete[] matrix[i];
       }
     }
