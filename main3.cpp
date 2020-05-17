@@ -83,7 +83,7 @@ int main(void ){
     image_in.printMatrix(oss);
 
 
-
+   
 
 	return 0;
 }
