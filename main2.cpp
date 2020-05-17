@@ -3,26 +3,30 @@
 #include <iomanip>
 #include <sstream>
 #include <cstdlib>
-#include <cmdline.h>
 
+#include "cmdline.h"
 #include "image.h"
 
 using namespace std;
+
+//************************DECLARACION FUNCIONES************************//
 
 static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
-void prepare_image (image &);
+void read_pgm(image &);
 
-#define PGM_IDENTIFIER P2
+//*****************************VARIABLES GLOBALES*****************************//
 
-
-/*static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
+static enum funciones ("z", "exp(z)");
+static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
 static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
 static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
-*/
+
+static string PGM_IDENTIFIER = "P2";
+static char SKIP_LINE_IDENTIFIER = '#';
 
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
@@ -32,29 +36,19 @@ static option_t options[] = {
 	{0, },
 };
 
-static enum funciones ("z", "exp(z)");
-static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
-static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
-static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
-static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
 
 static void opt_input(string const &arg){
-	// Si el nombre del archivos es "-", usaremos la entrada
-	// estándar. De lo contrario, abrimos un archivo en modo
-	// de lectura.
-	//
+
 	if (arg == "-") {
 		iss = &cin;		// Establezco la entrada estandar cin como flujo de entrada
 	}
 	else {
-		ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
-										// sequence of characters (i.e., a C-string) representing
-										// the current value of the string object.
+		ifs.open(arg.c_str(), ios::in);
+
 		iss = &ifs;
 	}
 
 	// Verificamos que el stream este OK.
-	//
 	if (!iss->good()) {
 		cerr << "cannot open "
 		     << arg
@@ -65,25 +59,20 @@ static void opt_input(string const &arg){
 }
 
 static void opt_output(string const &arg){
-	// Si el nombre del archivos es "-", usaremos la salida
-	// estándar. De lo contrario, abrimos un archivo en modo
-	// de escritura.
-	//
-	if (arg == "-") {
+
+	if (arg == "-") {	// Veo si el input es -, si es: 
 		oss = &cout;	// Establezco la salida estandar cout como flujo de salida
 	} else {
 		ofs.open(arg.c_str(), ios::out);
 		oss = &ofs;
 	}
 
-	// Verificamos que el stream este OK.
-	//
 	if (!oss->good()) {
 		cerr << "cannot open "
 		     << arg
 		     << "."
 		     << endl;
-		exit(1);		// EXIT: Terminación del programa en su totalidad
+		exit(1);
 	}
 }
 
@@ -114,20 +103,7 @@ static void opt_help(string const &arg){
 	exit(0);
 }
 
-void prepare_image (image & image_in){
-	string pgm_identifier = "";
-	int width = 0, heigth = 0;
-
-	(*iss)>>pgm_identifier;		//Primer linea es el identificador, chequeo que este bien
-
-	if (pgm_identifier != PGM_IDENTIFIER){
-		cerr << "File is not PGM"<< endl;
-		exit(1);
-	}
-
-
-}
-
+// **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
@@ -141,47 +117,51 @@ int main(int argc, char * const argv[]){
 	return 0;
 }
 
-/*
-void load_image(istream *is, image image_in){
-	ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
-										// sequence of characters (i.e., a C-string) representing
-										// the current value of the string object.
-	iss = &ifs;
 
-		// Verificamos que el stream este OK.
-	//
-	if (!iss->good()) {
-		cerr << "cannot open "
-		     << arg
-		     << "."
-		     << endl;
-		exit(1);
-	}
+void read_pgm(image & img_arg){	// Esta funcion lee del archivo de input y llena la
+  int aux, i = 0, j = 0;		// imagen que se le pase como argumento. Se supone
+  string in_string, temp;		// que hay un solo comentario y el pgm esta bien organizado
 
-	int num;
+  getline(*iss, in_string); // Identificador
+  in_string.pop_back();
+  if (in_string != PGM_IDENTIFIER){
+    cerr << "No es PGM" << endl;
+    exit(1);
+  }
 
-	while (*is >> num) {
-		*os << num * factor
-		    << "\n";
-	}
+  getline(*iss, in_string);   // Supongo que tiene un solo comentario
+  if (in_string[0] == SKIP_LINE_IDENTIFIER){
+    cout << "Encontro un comentario" << endl; // Lo salteo
+  }
+  else{
+    getline(*iss, in_string); // Dimsensiones
+    stringstream ss (in_string);
+    while(!ss.eof()){
+        ss >> temp;
+        if(stringstream(temp) >> aux){  // Si puedo convertir a int, guardo
+          size[i] = aux; // CAMBIAAAAAAAAAAAAAAAAAAAAAAAAAAR
+          i++;
+        }
+        temp = "";
+    }
+  }
+  i = 0;
 
-	for ()
-
-	if (os->bad()) {
-		cerr << "cannot write to output stream."
-		     << endl;
-		exit(1);
-	}
-	if (is->bad()) {
-		cerr << "cannot read from input stream."
-		     << endl;
-		exit(1);
-	}
-	if (!is->eof()) {
-		cerr << "cannot find EOF on input stream."
-		     << endl;
-		exit(1);
-	}
+  getline(*iss, in_string); // Escala de grises
+  greyscale = stoi(in_string);  //CAMBIAAAAAAAAAAAAAAAAAAAAAR
 
 
-}*/
+  while(getline(*iss, in_string)){
+    stringstream ss (in_string);
+    while(!ss.eof()){
+      ss >> temp;
+      if(stringstream(temp) >> aux){
+        matri[j][i] = aux;  //CAMBIAAAAAAAAAAAAAAAAAAAAAAAAAAAR
+        i++;
+      }
+      temp = "";
+    }
+    i = 0;
+    j++;
+  }
+}
