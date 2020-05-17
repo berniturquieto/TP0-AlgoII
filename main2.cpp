@@ -13,6 +13,9 @@ static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
+void prepare_image (image &);
+
+#define PGM_IDENTIFIER P2
 
 
 /*static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
@@ -84,7 +87,7 @@ static void opt_output(string const &arg){
 	}
 }
 
-static void opt_function(string const &arg){
+static void opt_function(string const &arg){		// HAY QUE CAMBIAR ESTO
 	istringstream iss(arg);
 
 	// Intentamos extraer la funcion de la línea de comandos.
@@ -109,6 +112,20 @@ static void opt_help(string const &arg){
 	cout << "cmdline -f function [-i file] [-o file]"
 	     << endl;
 	exit(0);
+}
+
+void prepare_image (image & image_in){
+	string pgm_identifier = "";
+	int width = 0, heigth = 0;
+
+	(*iss)>>pgm_identifier;		//Primer linea es el identificador, chequeo que este bien
+
+	if (pgm_identifier != PGM_IDENTIFIER){
+		cerr << "File is not PGM"<< endl;
+		exit(1);
+	}
+
+
 }
 
 
