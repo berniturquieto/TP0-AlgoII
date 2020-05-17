@@ -18,28 +18,31 @@ pixel::pixel(const double arg_real, const double arg_img, const int arg_color){
 }
 
 // Constructor copia
-pixel::pixel(const pixel & pixel_a_copiar){
+/*pixel::pixel(const pixel & pixel_a_copiar){
 	color = pixel_a_copiar.color;
-	pos.set_real(pixel_a_copiar.get_real());
-	pos.set_img(pixel_a_copiar.get_img());
-}
+	pos.set_real((pixel_a_copiar.get_pos()).get_real());
+	pos.set_img((pixel_a_copiar.get_pos()).get_img());
+}*/
 
 // Destructor. En este caso no hace nada porque no se pide memoria.
 pixel::~pixel(){}	
 
 // Setters y Getters
-pixel::set_color(const int A){
+void pixel::set_color(const int A){
 	color = A;
 }
 
-pixel::set_pos(const double arg_real, const double arg_img){
+void pixel::set_pos(const double arg_real, const double arg_img){
 	pos.set_real(arg_real);
 	pos.set_img(arg_img);
 }
 
-pixel::set_pos(const complejo arg_complejo){	// Setter de pos pero pasandole un complejo
-	pos.set_real(arg_complejo.get_real());
-	pos.set_img(arg_complejo.get_img());
+void pixel::set_pos(const complejo arg_complejo){	// Setter de pos pero pasandole un complejo
+
+	double r = arg_complejo.get_real();
+	double i = arg_complejo.get_img();
+	pos.set_real(r);
+	pos.set_img(i);
 }
 
 int pixel::get_color(){
@@ -51,11 +54,11 @@ complejo pixel::get_pos(){
 }
 
 // Printer
-pixel::print_pixel(){
+void pixel::print_pixel(){
 	pos.print_complejo();
 	cout << " " << color << endl;
 }
 
-pixel::print_color(){
+void pixel::print_color(){
 	cout << color << endl;
 }

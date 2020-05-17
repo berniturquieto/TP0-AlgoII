@@ -35,11 +35,11 @@ void complejo::set_img(const double arg_img){
 }
 
 // Getters
-double complejo::get_real(void){
+double complejo::get_real(void) const{
 	return real;
 }
 
-double complejo::get_img(void){
+double complejo::get_img(void) const{
 	return img;
 }
 

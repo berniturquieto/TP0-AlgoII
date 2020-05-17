@@ -16,21 +16,21 @@ class pixel {
 
   	pixel(); // Constructor por defecto
   	pixel(const double, const double, const int ); // Constructor real,img,color
-  	pixel(const pixel &); // Constructor copia
+  	//pixel(const pixel &); // Constructor copia
   	~pixel();	// Destructor
   
   	// Setters y Getters
-  	set_color(const int);
-  	set_pos(const double, const double);
-  	set_pos(const complejo);
+  	void set_color(const int);
+  	void set_pos(const double, const double);
+  	void set_pos(const complejo);
   	int get_color();
   	complejo get_pos();
 
   	// Printer
-  	print_pixel();
-  	print_color();
+  	void print_pixel();
+  	void print_color();
   
-}
+};
 
 #endif
 

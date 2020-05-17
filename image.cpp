@@ -16,21 +16,21 @@ image::image(){
 // Constructor por parametro
 image::image(const int w, const int h, const int gs){
 
-  int max = 0;
+
   width = w;
   height = h;
   greyscale = gs;
 
-  if(w<h){max = h;} else{max = w;}
+  if(w<h){int max = h;} else{int max = w;}
 
-  matrix = new int*[max];
+  matrix = new pixel*[max];
   for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
-      matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+      matrix[i] = new pixel[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
   }                               // Por eso se pide dos veces de dimension "max"
 
   for (int i = 0, i < max, i++){
     for (int j = 0; j < max; j++){  
-      matrix[i][j] = 0;
+      matrix[i][j].set_color(0);
     }
   }
 }
@@ -84,3 +84,18 @@ image::set_greyscale(const int A){
 int image::get_greyscale(){
   return greyscale:
 }
+
+
+/*
+void image::printMatrix(){
+  if(w<h){max = h;} else{max = w;}
+    for(int x=0;x<max;x++)
+    {
+        for(int y=0;y<this->max;y++) {
+            std::cout << this->matrix[x][y].get_color();
+            std::cout << " ";
+        }
+
+        std::cout<<std::endl;
+    }
+}*/

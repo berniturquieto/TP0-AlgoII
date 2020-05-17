@@ -2,15 +2,16 @@
 #define _IMAGE_H_INCLUIDO_
 
 #include <iostream>
+#include "pixel.h"
 
 using namespace std;
 
 class image{
   private:
-		int width;
-  	int heigth;
+	int width;
+  	int height;
   	int greyscale;
-  	int **matrix;
+  	pixel **matrix;
 
 	public:
 
@@ -31,6 +32,6 @@ class image{
 
     // Metodos
     //aca va el metodo que llene la matriz de ints
-}
+};
 
 #endif

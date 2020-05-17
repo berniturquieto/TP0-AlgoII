@@ -18,8 +18,8 @@ public:
 	// Setters y Getters
 	void set_real(const double);
 	void set_img(const double);
-	double get_real();
-	double get_img();
+	double get_real() const;
+	double get_img()const;
 	double get_modulo();
 	double get_angulo();
 
