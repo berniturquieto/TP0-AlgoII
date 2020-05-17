@@ -29,7 +29,7 @@ static option_t options[] = {
 	{0, },
 };
 
-static int factor;	// HAY Q CAMBIAR ESTO
+static enum funciones ("z", "exp(z)");
 static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
 static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
@@ -88,10 +88,7 @@ static void opt_function(string const &arg){
 	istringstream iss(arg);
 
 	// Intentamos extraer la funcion de la línea de comandos.
-	// Para detectar argumentos que únicamente consistan de
-	// números enteros, vamos a verificar que EOF llegue justo
-	// después de la lectura exitosa del escalar.
-	//
+
 	if (!(iss >> factor)
 	    || !iss.eof()) {
 		cerr << "non-integer factor: "

@@ -23,7 +23,7 @@ class image{
   	
 
   	// Setters y getters
-	void set_width(const int);
+    void set_width(const int);
    	int get_width();
     void set_height(const int);
     int get_height();
