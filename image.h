@@ -30,6 +30,7 @@ class image{
     int get_greyscale();
     void printMatrix();
     void printMatrix(ostream*);
+    void fill_matrix(const int **);
 
     // Metodos
     //aca va el metodo que llene la matriz de ints
