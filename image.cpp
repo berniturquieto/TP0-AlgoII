@@ -6,8 +6,8 @@ using namespace std;
 // Constructor por defecto
 image::image(){
 
-  width=0;
-  height=0;
+  size[0]=0;    //ancho
+  size[1]=0;    // alto
   greyscale=0;
   (*matrix) = NULL;
   matrix = NULL;
@@ -17,8 +17,8 @@ image::image(){
 image::image(const int w, const int h, const int gs, int ** matrix){
 
   int max = 0;
-  width = w;
-  height = h;
+  size[0] = w;
+  size[1] = h;
   greyscale = gs;
 
   if(w<h){max = h;} else{max = w;}
@@ -51,7 +51,7 @@ todo el vector de matrix, hago free de matrix.*/
 image::~image(){ 
   int max = 0;
 
-  if(width<height){max = height;} else{max = width;}
+  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
 
   if (matrix){                
     for (int i = 0; i<max; i++){    
@@ -67,19 +67,19 @@ image::~image(){
 // Setter y getters
 
 void image::set_width(const int A){
-  width = A;
+  size[0] = A;
 }
 
 int image::get_width(){
-  return width;
+  return size[0];
 }
 
 void image::set_height(const int A){
-  height = A;
+  size[1] = A;
 }
 
 int image::get_height(){
-  return height;
+  return size[1];
 }
 
 void image::set_greyscale(const int A){
@@ -94,7 +94,7 @@ int image::get_greyscale(){
 
 void image::printMatrix(){
   int max=0;
-  if(width<height){max = height;} else{max = width;}
+  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
     for(int x=0;x<max;x++)
     {
         for(int y=0;y<max;y++) {
@@ -103,5 +103,38 @@ void image::printMatrix(){
         }
 
         std::cout<<std::endl;
+    }
+}
+
+void image::printMatrix(ostream *os){
+
+    int max=0;
+    if(size[0]<size[1]){max = size[1];} else{max = size[0];}
+
+    *os << "P2"<<'\n'<<max<<" "<<max<<'\n'<<greyscale<<'\n';
+    if (os->bad()) {
+        cerr << "cannot write to output stream."
+        << endl;
+        exit(1);
+    }
+
+    for(int x=0;x<max;x++)
+    {
+        for(int y=0;y<max;y++) {
+            *os << this->matrix[x][y];
+            *os << " ";
+                if (os->bad()) {
+                    cerr << "cannot write to output stream."
+                    << endl;
+                    exit(1);
+                }            
+        }
+
+        *os<<std::endl;
+        if (os->bad()) {
+            cerr << "cannot write to output stream."
+            << endl;
+            exit(1);
+        } 
     }
 }

@@ -1,4 +1,10 @@
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <cstdlib>
+
+#include "cmdline.h"
 
 
 #include "image.h"
@@ -6,6 +12,10 @@
 
 using namespace std;
 complejo ** complex_matrix(double);
+
+
+static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
+static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
 
 int main(void ){
 /*	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
@@ -44,7 +54,7 @@ int main(void ){
 
 
 	image_in.printMatrix();
-
+	/*cout<<"matriz de complejos"<<endl;
 	if(w<h){max = h;} else{max = w;}
 	max=5;
 	matrix_c=complex_matrix(max);
@@ -56,7 +66,22 @@ int main(void ){
         cout<<endl;
 
         std::cout<<std::endl;
+    }*/
+
+    ofs.open("prueba.pgm", ios::out);
+    oss = &ofs;
+    
+
+    // Verificamos que el stream este OK.
+    //
+    if (!oss->good()) {
+        cerr << "cannot open "
+             << "."
+             << endl;
+        exit(1);        // EXIT: Terminación del programa en su totalidad
     }
+    image_in.printMatrix(oss);
+
 
 
 

@@ -8,8 +8,7 @@ using namespace std;
 
 class image{
   private:
-	int width;
-  	int height;
+	int size [2]; //ancho y alto
   	int greyscale;
   	int **matrix;
 
@@ -30,6 +29,7 @@ class image{
     void set_greyscale(const int );
     int get_greyscale();
     void printMatrix();
+    void printMatrix(ostream*);
 
     // Metodos
     //aca va el metodo que llene la matriz de ints
