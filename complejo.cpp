@@ -53,7 +53,7 @@ double complejo::get_angulo(){
 
 // Printer
 void complejo::print_complejo(){
-	cout << real << "+" << img << "i" << endl;
+	cout <<"(" << real << "," << img << ")";
 }
 
 // CONJUGAR
@@ -151,6 +151,29 @@ complejo complejo::exponencial(){
 
   return aux;
 }
+
+
+/*
+// Matrix
+
+complejo ** complejo::complex_matrix(double max){
+	complejo ** matrix;
+	matrix = new complejo*[max];
+
+ 	for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
+      matrix[i] = new complejo[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+  	}                               // Por eso se pide dos veces de dimension "max"
+
+  	for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
+    	for (int j = 0; j < max; j++){  // co
+    		matrix[i][j]=complejo(((i+1)/max)-1/2,((j+1)/max)-1/2);
+      	}
+      
+    }
+
+    return matrix;
+}
+*/
 
 
 
