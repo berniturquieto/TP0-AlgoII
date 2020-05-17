@@ -2,7 +2,6 @@
 #define _IMAGE_H_INCLUIDO_
 
 #include <iostream>
-//#include "pixel.h"
 #include "complejo.h"
 
 using namespace std;
