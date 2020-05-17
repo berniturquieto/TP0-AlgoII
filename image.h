@@ -8,7 +8,7 @@ using namespace std;
 
 class image{
   private:
-	int width;
+    int width;
   	int height;
   	int greyscale;
   	int **matrix;
