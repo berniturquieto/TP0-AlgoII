@@ -30,6 +30,7 @@ class image{
     int get_height();
     void set_greyscale(const int );
     int get_greyscale();
+    void printMatrix();
 
     // Metodos
     //aca va el metodo que llene la matriz de ints

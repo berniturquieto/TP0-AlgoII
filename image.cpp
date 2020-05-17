@@ -86,16 +86,17 @@ int image::get_greyscale(){
 }
 
 
-/*
+
 void image::printMatrix(){
-  if(w<h){max = h;} else{max = w;}
+  int max=0;
+  if(width<height){max = height;} else{max = width;}
     for(int x=0;x<max;x++)
     {
-        for(int y=0;y<this->max;y++) {
-            std::cout << this->matrix[x][y].get_color();
+        for(int y=0;y<max;y++) {
+            std::cout << this->matrix[x][y];
             std::cout << " ";
         }
 
         std::cout<<std::endl;
     }
-}*/
+}

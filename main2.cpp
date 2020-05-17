@@ -5,10 +5,11 @@
 using namespace std;
 
 
-static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
+/*static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
 static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
 static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
+*/
 
 int main (){
 
@@ -16,12 +17,12 @@ int main (){
 	int w = 24, h = 7, gs = 10;
 	image image_in(w,h,gs);
 
-
+	image_in.printMatrix();
 
 	return 0;
 }
 
-
+/*
 void load_image(istream *is, image image_in){
 	ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
 										// sequence of characters (i.e., a C-string) representing
@@ -64,4 +65,4 @@ void load_image(istream *is, image image_in){
 	}
 
 
-}
+}*/
