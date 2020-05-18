@@ -140,8 +140,9 @@ void image::printMatrix(ostream *os){
 
 void image::fill_matrix(const int ** matrix){
 
-
-    if(w<h){max = h;} else{max = w;}
+    int max=0;
+    int h=size[1];
+    if(size[0]<size[1]){max = size[1];} else{max = size[0];}
 
     this->matrix = new int*[max];
     for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
