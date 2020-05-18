@@ -137,7 +137,7 @@ void image::printMatrix(ostream *os){
     }
 }
 
-
+/*
 void image::fill_matrix(int ** matrix){
 
     int max=0;
@@ -160,3 +160,4 @@ void image::fill_matrix(int ** matrix){
     }
 
 }
+*/

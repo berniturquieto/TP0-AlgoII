@@ -108,6 +108,10 @@ static void opt_help(string const &arg){
 
 int main(int argc, char * const argv[]){
 
+
+	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
+	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+
 	cout << "1" << endl;
 
 	image input_image;
@@ -116,8 +120,6 @@ int main(int argc, char * const argv[]){
 	image output_image;
 	cout << "3" << endl;
 
-	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
-	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
 	read_pgm(input_image);
 	ofs.open("prueba.pgm", ios::out);
@@ -201,5 +203,5 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     i = 0;
     j++;
   }
-  img_arg.fill_matrix(aux_matrix);
+//  img_arg.fill_matrix(aux_matrix);
 }
