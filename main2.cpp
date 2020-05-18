@@ -107,11 +107,17 @@ static void opt_help(string const &arg){
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
+
+	cout << "1" << endl;
+
+	image input_image;
+	cout << "2" << endl;
+
+	image output_image;
+	cout << "3" << endl;
+
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
-	
-	image input_image;
-	image output_image;
 
 	read_pgm(input_image);
 	ofs.open("prueba.pgm", ios::out);
