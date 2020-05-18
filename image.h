@@ -16,7 +16,7 @@ class image{
 
     // Contructores
   	image(); // Por defecto
-  	/*image(const int, const int, const int, int **);  // Constructor por argument*/
+  	image(const int, const int, const int, int **);  // Constructor por argument
       //image(); // Constructor copia
   	~image();  // Destructor
   	

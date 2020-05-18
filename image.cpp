@@ -13,7 +13,7 @@ image::image(){
 }
 
 // Constructor por parametro
-/*image::image(const int w, const int h, const int gs, int ** matrix){
+image::image(const int w, const int h, const int gs, int ** matrix){
 
     int max = 0;
     size[0] = w;
@@ -35,7 +35,7 @@ image::image(){
             }
         }
     }
-}*/
+}
 
 // CONSTRUCTOR COPIA HACEMOS?
 

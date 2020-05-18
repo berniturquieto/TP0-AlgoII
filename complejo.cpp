@@ -153,21 +153,30 @@ complejo complejo::exponencial(){
 }
 
 
-/*
-// Matrix
 
+// Matrix
+/*
 complejo ** complejo::complex_matrix(double max){
+	cout<<"Entro";
 	complejo ** matrix;
-	matrix = new complejo*[max];
+	
+	matrix = new complejo*[(int)max];
 
  	for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
-      matrix[i] = new complejo[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+      matrix[i] = new complejo[(int)max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
   	}                               // Por eso se pide dos veces de dimension "max"
 
+	double paso=2/(max-1);
+	double aux_real=-1;
+	double aux_imag=1;
+	cout << aux_real << endl;
   	for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
     	for (int j = 0; j < max; j++){  // co
-    		matrix[i][j]=complejo(((i+1)/max)-1/2,((j+1)/max)-1/2);
+    		matrix[i][j]=complejo(aux_real,aux_imag);
+    		aux_real=aux_real+paso;
       	}
+      	aux_real=-1;
+      	aux_imag=aux_imag-paso;
       
     }
 

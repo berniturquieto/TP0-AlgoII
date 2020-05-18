@@ -42,7 +42,6 @@ public:
 
 	// Funciones
 	complejo exponencial ();
-	//complejo ** complex_matrix(double);
 
 
 private:
