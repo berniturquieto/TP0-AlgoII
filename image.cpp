@@ -9,8 +9,7 @@ image::image(){
   size[0]=0;    //ancho
   size[1]=0;    // alto
   greyscale=0;
-  (*matrix) = NULL;
-  matrix = NULL;
+  this->matrix=NULL;
 }
 
 // Constructor por parametro
@@ -137,7 +136,7 @@ void image::printMatrix(ostream *os){
     }
 }
 
-/*
+
 void image::fill_matrix(int ** matrix){
 
     int max=0;
@@ -160,4 +159,3 @@ void image::fill_matrix(int ** matrix){
     }
 
 }
-*/

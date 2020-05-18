@@ -26,7 +26,7 @@ static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de sa
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
 static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
 
-static string PGM_IDENTIFIER = "P2";
+static string PGM_IDENTIFIER = "P";
 static char SKIP_LINE_IDENTIFIER = '#';
 
 static option_t options[] = {
@@ -112,20 +112,19 @@ int main(int argc, char * const argv[]){
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
-	cout << "1" << endl;
+	//cout << "aaa" << endl;
 
 	image input_image;
-	cout << "2" << endl;
+	//cout << "2" << endl;
 
 	image output_image;
-	cout << "3" << endl;
+	//cout << "3" << endl;
 
 
 	read_pgm(input_image);
 	ofs.open("prueba.pgm", ios::out);
     oss = &ofs;
-    
-
+  
     // Verificamos que el stream este OK.
     //
     if (!oss->good()) {
@@ -134,6 +133,7 @@ int main(int argc, char * const argv[]){
              << endl;
         exit(1);        // EXIT: Terminación del programa en su totalidad
     }
+    cout << "abrio el archivo" << endl;
     input_image.printMatrix(oss);
 
 	return 0;
@@ -149,7 +149,7 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   getline(*iss, in_string); // Identificador
   in_string.pop_back();
   if (in_string != PGM_IDENTIFIER){
-    cerr << "No es PGM" << endl;
+    cerr<< "leyo"<<in_string << "No es PGM" <<endl;
     exit(1);
   }
 
@@ -172,9 +172,9 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   }
   img_arg.set_width(aux_size[0]);
   img_arg.set_height(aux_size[1]);
-
+  cout << "w" << aux_size[0]<<":" <<aux_size[1] << endl;
   i=0;
-
+  
   getline(*iss, in_string); // Escala de grises
   greyscale = stoi(in_string);
 
@@ -184,14 +184,19 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   for (int i = 0; i < aux_size[0]; i++){  // Crea la matriz de enteros y los llena con ceros
       aux_matrix[i] = new int[aux_size[1]];   // Hay que tener en cuenta q la matriz va a ser cuadrada
   }                               // Por eso se pide dos veces de dimension "max"
-
+  i=0;
+  j=0;
   while(getline(*iss, in_string)){	// Relleno matriz
     stringstream ss (in_string);
+    cout << "entre"<<i << endl;
     while(!ss.eof()){
       ss >> temp;
+      cout << "entre2" << j<< endl;
       if(stringstream(temp) >> aux){
       	if(aux >= 0 && aux <= greyscale){
+          cout << "if" << endl;
         	aux_matrix[j][i] = aux;
+          cout << "if2" << endl;
         	i++;
         } else{
         	cerr << "No esta en la greyscale" << endl;
@@ -203,5 +208,6 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     i = 0;
     j++;
   }
-//  img_arg.fill_matrix(aux_matrix);
+  cout << "llegue aca" << endl;
+  img_arg.fill_matrix(aux_matrix);
 }
