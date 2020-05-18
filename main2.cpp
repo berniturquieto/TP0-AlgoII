@@ -19,14 +19,12 @@ void read_pgm(image &);
 
 //*****************************VARIABLES GLOBALES*****************************//
 
-//static enum funciones ("z", "exp(z)");
-static int factor;
 static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
 static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
 static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
 
-static string PGM_IDENTIFIER = "P";
+static string PGM_IDENTIFIER = "P2";
 static char SKIP_LINE_IDENTIFIER = '#';
 
 static option_t options[] = {
@@ -43,6 +41,7 @@ static functions chosen_function = z;
 #define FUNCTION_Z "z"
 #define FUNCTION_EXPZ "expz"
 
+//************************FUNCIONES DE CMDLINE************************//
 
 static void opt_input(string const &arg){
 
@@ -108,14 +107,8 @@ int main(int argc, char * const argv[]){
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
-	//cout << "aaa" << endl;
-
 	image input_image;
-	//cout << "2" << endl;
-
 	image output_image;
-	//cout << "3" << endl;
-
 
 	read_pgm(input_image);
 	ofs.open("prueba.pgm", ios::out);
@@ -124,16 +117,14 @@ int main(int argc, char * const argv[]){
     // Verificamos que el stream este OK.
 
     if (!oss->good()) {
-        cerr << "cannot open "
-             << "."
-             << endl;
+        cerr << "cannot open " << "." << endl;
         exit(1);        // EXIT: Terminación del programa en su totalidad
     }
     cout << "abrio el archivo" << endl;
-    input_image.printMatrix(oss);
+    //input_image.printMatrix(oss);   ACA HAY SIGSEVVVVVVVVVVVVVVVVVVVVVVV
 
-    /*switch(chosen_function){   Asi se usa el switch de que funcion
-      case z:                     se elige.
+    switch(chosen_function){  
+      case z:                     
         cout<< "elegite z" << endl;
         break;
       case expz: 
@@ -141,7 +132,7 @@ int main(int argc, char * const argv[]){
         break;
       default: 
         cout<< "lo rompite" << endl;
-    }*/
+    }
 
 	return 0;
 }
@@ -157,7 +148,7 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   getline(*iss, in_string); // Identificador
   in_string.pop_back();
   if (in_string != PGM_IDENTIFIER){
-    cerr<< "leyo"<<in_string << "No es PGM" <<endl;
+    cerr<< "No es PGM" <<endl;
     exit(1);
   }
 
@@ -166,22 +157,22 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
     cout << "Encontro un comentario" << endl; // Lo salteo
   }
-  else{
-    getline(*iss, in_string); // Dimsensiones
-    stringstream ss (in_string);
-    while(!ss.eof()){
-        ss >> temp;
-        if(stringstream(temp) >> aux){  // Si puedo convertir a int, guardo
-          aux_size[i] = 0;
-          i++;
-        }
-        temp = "";
-    }
+
+
+  getline(*iss, in_string); // Dimsensiones
+  stringstream ss (in_string);
+  while(!ss.eof()){
+      ss >> temp;
+      if(stringstream(temp) >> aux){  // Si puedo convertir a int, guardo
+        aux_size[i] = aux;
+        i++;
+      }
+      temp = "";
   }
   img_arg.set_width(aux_size[0]);
   img_arg.set_height(aux_size[1]);
-  cout << "w" << aux_size[0]<<":" <<aux_size[1] << endl;
   i=0;
+
   
   getline(*iss, in_string); // Escala de grises
   greyscale = stoi(in_string);
@@ -196,15 +187,15 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   j=0;
   while(getline(*iss, in_string)){	// Relleno matriz
     stringstream ss (in_string);
-    cout << "entre"<<i << endl;
+    //cout << "entre"<<i << endl;
     while(!ss.eof()){
       ss >> temp;
-      cout << "entre2" << j<< endl;
+      //cout << "entre2" << j<< endl;
       if(stringstream(temp) >> aux){
       	if(aux >= 0 && aux <= greyscale){
-          cout << "if" << endl;
+          //cout << "if" << endl;
         	aux_matrix[j][i] = aux;
-          cout << "if2" << endl;
+          //cout << "if2" << endl;
         	i++;
         } else{
         	cerr << "No esta en la greyscale" << endl;
@@ -216,6 +207,15 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     i = 0;
     j++;
   }
-  cout << "llegue aca" << endl;
-  img_arg.fill_matrix(aux_matrix);
+  
+  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
+  cout << greyscale << endl;
+  for(int x=0 ; x< aux_size[0]; x++){
+    for(int y=0 ; y< aux_size[1]; y++){
+      cout << aux_matrix[x][y] << " ";
+    }
+    cout << endl;
+  }*/       //PRUEBAS DE IMPRESION
+
+  img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
 }

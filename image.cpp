@@ -91,16 +91,15 @@ int image::get_greyscale(){
 
 void image::printMatrix(){
   int max=0;
-  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
-    for(int x=0;x<max;x++)
-    {
-        for(int y=0;y<max;y++) {
-            std::cout << this->matrix[x][y];
-            std::cout << " ";
-        }
 
-        std::cout<<std::endl;
+  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
+
+  for(int x=0 ; x<max ; x++){
+    for(int y=0 ; y<max ; y++) {
+      cout << this->matrix[x][y] << " ";
     }
+    cout << endl;
+  }
 }
 
 void image::printMatrix(ostream *os){
@@ -138,22 +137,22 @@ void image::printMatrix(ostream *os){
 
 
 void image::fill_matrix(int ** matrix){
-
     int max=0;
     int h=size[1];
     if(size[0]<size[1]){max = size[1];} else{max = size[0];}
 
     this->matrix = new int*[max];
-    for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
+
+    for (int i=0 ; i<max ; i++){  // Crea la matriz de enteros y los llena con ceros
       this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
     }                               // Por eso se pide dos veces de dimension "max"
 
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
             if (i<((max-h)/2) || i>((max+h)/2)-1){
-            this->matrix[i][j] = 0;
+              this->matrix[i][j] = 0;
             }else{
-            this->matrix[i][j] = matrix[i-(h+1)][j];
+              this->matrix[i][j] = matrix[i-(h+1)][j];
             }
         }
     }
