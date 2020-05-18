@@ -8,7 +8,7 @@ using namespace std;
 
 class image{
   private:
-	int size [2]; //ancho y alto
+	int size [2]; // Ancho y alto
   	int greyscale;
   	int **matrix;
 

@@ -173,49 +173,71 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   img_arg.set_height(aux_size[1]);
   i=0;
 
-  
   getline(*iss, in_string); // Escala de grises
   greyscale = stoi(in_string);
 
   img_arg.set_greyscale(greyscale);
 
-  aux_matrix = new int*[aux_size[0]];
-  for (int i = 0; i < aux_size[0]; i++){  // Crea la matriz de enteros y los llena con ceros
-      aux_matrix[i] = new int[aux_size[1]];   // Hay que tener en cuenta q la matriz va a ser cuadrada
-  }                               // Por eso se pide dos veces de dimension "max"
+
+  /*Crea la matriz de enteros y los llena con ceros hay que
+  tener en cuenta q la matriz va a ser cuadrada por eso se pide
+  dos veces de dimension "max"*/
+  aux_matrix = new int*[aux_size[0]]; // Pido memoria para la cant de columnas (ancho)
+  for (int i = 0; i < aux_size[0]; i++){  // Por cada columna
+      aux_matrix[i] = new int[aux_size[1]]; // Pido cantidad de filas
+  }
   i=0;
-  j=0;
-  while(getline(*iss, in_string)){	// Relleno matriz
+  j=0; // Setteo en 0,0 para usar a continuacion
+
+/*  for (i = 0; i < aux_size[1]; i++){
+    if(getline(*iss, in_string)){
+      stringstream ss (in_string);
+      for(j = 0 ; j < aux_size[0]; j++){
+        if (!ss.eof()){
+          ss >> temp;
+          if(stringstream(temp) >> aux){
+            if(aux >= 0 && aux <= greyscale){
+              aux_matrix[i][j] = aux;
+              //cout << aux<< " ";
+            } else{cerr << "No esta en la greyscale" << endl; exit(1);}
+          }
+          temp= "";
+        }
+      }
+    }
+  }*/
+
+  while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
     stringstream ss (in_string);
-    //cout << "entre"<<i << endl;
+
     while(!ss.eof()){
       ss >> temp;
-      //cout << "entre2" << j<< endl;
+
       if(stringstream(temp) >> aux){
+
       	if(aux >= 0 && aux <= greyscale){
-          //cout << "if" << endl;
         	aux_matrix[j][i] = aux;
-          //cout << "if2" << endl;
         	i++;
-        } else{
-        	cerr << "No esta en la greyscale" << endl;
-        	exit(1);
-        }
+        } else{cerr << "No esta en la greyscale" << endl; exit(1);}
+
       }
       temp = "";
     }
     i = 0;
     j++;
   }
-  
-  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
+
+  cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << greyscale << endl;
-  for(int x=0 ; x< aux_size[0]; x++){
-    for(int y=0 ; y< aux_size[1]; y++){
+  for(int x=0 ; x< aux_size[1]; x++){
+    for(int y=0 ; y< aux_size[0]; y++){
       cout << aux_matrix[x][y] << " ";
     }
     cout << endl;
-  }*/       //PRUEBAS DE IMPRESION
+  }       //PRUEBAS DE IMPRESION
 
-  img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
+  //img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
+  //img_arg.printMatrix();
+
+  // DESTRUIR LA MATRIZ AUXILIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
 }

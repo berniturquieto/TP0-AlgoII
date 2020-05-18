@@ -29,9 +29,9 @@ image::image(const int w, const int h, const int gs, int ** matrix){
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
             if (i<((max-h)/2) || i>((max+h)/2)-1){
-            this->matrix[i][j] = 0;
+              this->matrix[i][j] = 0;
             }else{
-            this->matrix[i][j] = matrix[i-(h+1)][j];
+              this->matrix[i][j] = matrix[i-(h+1)][j];
             }
         }
     }
@@ -147,11 +147,16 @@ void image::fill_matrix(int ** matrix){
       this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
     }                               // Por eso se pide dos veces de dimension "max"
 
+    cout << "Max: " << max << ", " << "Height: " << h<< endl;
+
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
-            if (i<((max-h)/2) || i>((max+h)/2)-1){
+            //cout << "i: " << i << ", " << "j: "<< j <<endl;
+            if ( i<((max-h)/2) || i>((max+h)/2)-1 ){
+              //cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
+              //cout << "aca2" << endl;
               this->matrix[i][j] = matrix[i-(h+1)][j];
             }
         }
