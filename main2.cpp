@@ -13,13 +13,14 @@ using namespace std;
 
 static void opt_input(string const &);
 static void opt_output(string const &);
-static void opt_function(string const &);
+static void opt_factor(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
 
 //*****************************VARIABLES GLOBALES*****************************//
 
-static enum funciones ("z", "exp(z)");
+//static enum funciones ("z", "exp(z)");
+static int factor;
 static istream *iss = 0;	// Input Stream (clase para manejo de los flujos de entrada)
 static ostream *oss = 0;	// Output Stream (clase para manejo de los flujos de salida)
 static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que deriva de istream para el manejo de archivos)
@@ -31,7 +32,7 @@ static char SKIP_LINE_IDENTIFIER = '#';
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
 	{1, "o", "output", "-", opt_output, OPT_DEFAULT},
-	{1, "f", "function", NULL, opt_function, OPT_DEFAULT},
+	{1, "f", "factor", NULL, opt_factor, OPT_MANDATORY},
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 };
@@ -76,7 +77,7 @@ static void opt_output(string const &arg){
 	}
 }
 
-static void opt_function(string const &arg){		// HAY QUE CAMBIAR ESTO
+static void opt_factor(string const &arg){		// HAY QUE CAMBIAR ESTO
 	istringstream iss(arg);
 
 	// Intentamos extraer la funcion de la línea de comandos.
@@ -108,19 +109,34 @@ static void opt_help(string const &arg){
 int main(int argc, char * const argv[]){
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+	
+	image input_image;
+	image output_image;
 
-	int w = 24, h = 7, gs = 10;
-	image image_in(w,h,gs);
+	read_pgm(input_image);
+	ofs.open("prueba.pgm", ios::out);
+    oss = &ofs;
+    
 
-	image_in.printMatrix();
+    // Verificamos que el stream este OK.
+    //
+    if (!oss->good()) {
+        cerr << "cannot open "
+             << "."
+             << endl;
+        exit(1);        // EXIT: Terminación del programa en su totalidad
+    }
+    input_image.printMatrix(oss);
 
 	return 0;
 }
 
 
-void read_pgm(image & img_arg){	// Esta funcion lee del archivo de input y llena la
-  int aux, i = 0, j = 0;		// imagen que se le pase como argumento. Se supone
+void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena la
+  int aux, aux_size[2], i = 0, j = 0, greyscale;	// imagen que se le pase como argumento. Se supone
+  int ** aux_matrix;
   string in_string, temp;		// que hay un solo comentario y el pgm esta bien organizado
+
 
   getline(*iss, in_string); // Identificador
   in_string.pop_back();
@@ -128,6 +144,7 @@ void read_pgm(image & img_arg){	// Esta funcion lee del archivo de input y llena
     cerr << "No es PGM" << endl;
     exit(1);
   }
+
 
   getline(*iss, in_string);   // Supongo que tiene un solo comentario
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
@@ -139,29 +156,44 @@ void read_pgm(image & img_arg){	// Esta funcion lee del archivo de input y llena
     while(!ss.eof()){
         ss >> temp;
         if(stringstream(temp) >> aux){  // Si puedo convertir a int, guardo
-          size[i] = aux; // CAMBIAAAAAAAAAAAAAAAAAAAAAAAAAAR
+          aux_size[i] = 0;
           i++;
         }
         temp = "";
     }
   }
-  i = 0;
+  img_arg.set_width(aux_size[0]);
+  img_arg.set_height(aux_size[1]);
+
+  i=0;
 
   getline(*iss, in_string); // Escala de grises
-  greyscale = stoi(in_string);  //CAMBIAAAAAAAAAAAAAAAAAAAAAR
+  greyscale = stoi(in_string);
 
+  img_arg.set_greyscale(greyscale);
 
-  while(getline(*iss, in_string)){
+  aux_matrix = new int*[aux_size[0]];
+  for (int i = 0; i < aux_size[0]; i++){  // Crea la matriz de enteros y los llena con ceros
+      aux_matrix[i] = new int[aux_size[1]];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+  }                               // Por eso se pide dos veces de dimension "max"
+
+  while(getline(*iss, in_string)){	// Relleno matriz
     stringstream ss (in_string);
     while(!ss.eof()){
       ss >> temp;
       if(stringstream(temp) >> aux){
-        matri[j][i] = aux;  //CAMBIAAAAAAAAAAAAAAAAAAAAAAAAAAAR
-        i++;
+      	if(aux >= 0 && aux <= greyscale){
+        	aux_matrix[j][i] = aux;
+        	i++;
+        } else{
+        	cerr << "No esta en la greyscale" << endl;
+        	exit(1);
+        }
       }
       temp = "";
     }
     i = 0;
     j++;
   }
+  img_arg.fill_matrix(aux_matrix);
 }

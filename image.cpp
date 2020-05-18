@@ -138,7 +138,7 @@ void image::printMatrix(ostream *os){
 }
 
 
-void image::fill_matrix(const int ** matrix){
+void image::fill_matrix(int ** matrix){
 
     int max=0;
     int h=size[1];
