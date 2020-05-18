@@ -13,7 +13,7 @@ using namespace std;
 
 static void opt_input(string const &);
 static void opt_output(string const &);
-static void opt_factor(string const &);
+static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
 
@@ -32,7 +32,7 @@ static char SKIP_LINE_IDENTIFIER = '#';
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
 	{1, "o", "output", "-", opt_output, OPT_DEFAULT},
-	{1, "f", "factor", NULL, opt_factor, OPT_MANDATORY},
+	{1, "f", "function", NULL, opt_function, OPT_DEFAULT},
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 };
@@ -77,7 +77,7 @@ static void opt_output(string const &arg){
 	}
 }
 
-static void opt_factor(string const &arg){		// HAY QUE CAMBIAR ESTO
+static void opt_function(string const &arg){		// HAY QUE CAMBIAR ESTO
 	istringstream iss(arg);
 
 	// Intentamos extraer la funcion de la línea de comandos.
@@ -126,7 +126,7 @@ int main(int argc, char * const argv[]){
     oss = &ofs;
   
     // Verificamos que el stream este OK.
-    //
+
     if (!oss->good()) {
         cerr << "cannot open "
              << "."
@@ -139,6 +139,7 @@ int main(int argc, char * const argv[]){
 	return 0;
 }
 
+// *******************************FUNCIONES**********************************//
 
 void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena la
   int aux, aux_size[2], i = 0, j = 0, greyscale;	// imagen que se le pase como argumento. Se supone
