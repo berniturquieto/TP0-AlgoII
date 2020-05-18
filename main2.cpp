@@ -37,6 +37,12 @@ static option_t options[] = {
 	{0, },
 };
 
+enum functions {z, expz};
+static functions chosen_function = z;
+
+#define FUNCTION_Z "z"
+#define FUNCTION_EXPZ "expz"
+
 
 static void opt_input(string const &arg){
 
@@ -77,25 +83,15 @@ static void opt_output(string const &arg){
 	}
 }
 
-static void opt_function(string const &arg){		// HAY QUE CAMBIAR ESTO
-	istringstream iss(arg);
+static void opt_function(string const &arg){
 
-	// Intentamos extraer la funcion de la línea de comandos.
+  if (arg == FUNCTION_Z || arg == "-") {chosen_function = z;}
 
-	if (!(iss >> factor)
-	    || !iss.eof()) {
-		cerr << "non-integer factor: "
-		     << arg
-		     << "."
-		     << endl;
-		exit(1);
-	}
-
-	if (iss.bad()) {
-		cerr << "cannot read integer factor."
-		     << endl;
-		exit(1);
-	}
+  else if (arg == FUNCTION_EXPZ) {chosen_function = expz; }
+  else{
+    cerr << "Funcion invalida" << endl;
+    exit(1);
+  }
 }
 
 static void opt_help(string const &arg){
@@ -135,6 +131,17 @@ int main(int argc, char * const argv[]){
     }
     cout << "abrio el archivo" << endl;
     input_image.printMatrix(oss);
+
+    /*switch(chosen_function){   Asi se usa el switch de que funcion
+      case z:                     se elige.
+        cout<< "elegite z" << endl;
+        break;
+      case expz: 
+        cout<< "elegite expz" << endl;
+        break;
+      default: 
+        cout<< "lo rompite" << endl;
+    }*/
 
 	return 0;
 }
