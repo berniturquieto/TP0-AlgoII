@@ -40,6 +40,7 @@ static functions chosen_function = z;
 
 #define FUNCTION_Z "z"
 #define FUNCTION_EXPZ "expz"
+#define NUL '\0'
 
 //************************FUNCIONES DE CMDLINE************************//
 
@@ -207,25 +208,48 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     }
   }*/
 
-  while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
-    stringstream ss (in_string);
+while(getline(*iss, in_string)){       
+    
+    stringstream iss (in_string);       
+    size_t i=0;
+    
+    if(!(in_string.empty())){
+      while (iss>>aux)
+      {
+        aux_matrix[j][i++]=aux;
+        cout << aux << " ";
+        if(i==16) 
+          break;
+      }
+    }
+    cout << endl;
+    j++;
+    if (j==10)
+      break;
+}
 
-    while(!ss.eof()){
-      ss >> temp;
+
+  /*while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
+    stringstream iss (in_string);
+
+    while(!iss.eof()){
+      iss >> temp;
 
       if(stringstream(temp) >> aux){
 
       	if(aux >= 0 && aux <= greyscale){
         	aux_matrix[j][i] = aux;
+          cout << aux << " ";
         	i++;
         } else{cerr << "No esta en la greyscale" << endl; exit(1);}
 
       }
       temp = "";
     }
+    cout << endl;
     i = 0;
     j++;
-  }
+  }*/
 
   cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << greyscale << endl;
@@ -234,7 +258,7 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
       cout << aux_matrix[x][y] << " ";
     }
     cout << endl;
-  }       //PRUEBAS DE IMPRESION
+  }       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
 
   //img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
   //img_arg.printMatrix();
