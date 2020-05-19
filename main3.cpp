@@ -161,18 +161,11 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 	if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
 		return NULL;
 	}
-	
-	/*if (in_lim[0]==fin_lim[0] || in_lim[1]==fin_lim[1]){
-		/*cout<<"SON IGUALES LLEGUE AL RESULTADO"<<endl;
 
-		cout<<in_lim[0]<<fin_lim[0]<<";"<<in_lim[1]<<fin_lim[1]<<endl;
-		return in_lim;
-	}*/
 
 	if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
-		cout<<"SON IGUALES LLEGUE AL RESULTADO"<<endl;
 
-		//cout<<in_lim[0]<<fin_lim[0]<<";"<<in_lim[1]<<fin_lim[1]<<endl;*/
+
 		if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
 			in_lim[0] = fin_lim[0];
 		}
