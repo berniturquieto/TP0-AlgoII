@@ -27,9 +27,9 @@ int main(void ){
 	int fin_lim[2];
 	int ** matrix;
 	complejo ** matrix_c;
-	complejo c(0.8,0.7);
+	complejo c(2,0.7);
 
- 	matrix = new int*[h];
+ 	/*matrix = new int*[h];
   	for (int i = 0; i < h; i++){  // Crea la matriz de enteros y los llena con ceros
   	    matrix[i] = new int[w];   // Hay que tener en cuenta q la matriz va a ser cuadrada
   	    cout<<i;
@@ -59,9 +59,9 @@ int main(void ){
 	image_in->fill_matrix(matrix);
 
 
-	image_in->printMatrix();
+	image_in->printMatrix();*/
 
-/*
+
 
 	if(w<h){max = h;} else{max = w;}
 	max=10;
@@ -75,7 +75,7 @@ int main(void ){
         cout<<endl;
 
         std::cout<<std::endl;
-    }*/
+    }
 
    /* ofs.open("prueba.pgm", ios::out);
     oss = &ofs;
@@ -94,7 +94,7 @@ int main(void ){
 
    */
 
-    /*in_lim[0]=0;
+    in_lim[0]=0;
     in_lim[1]=0;
     fin_lim[0]=max-1;
     fin_lim[1]=max-1;
@@ -116,8 +116,8 @@ int main(void ){
     }else{
     	cout<<"ERROR"<<endl;
     }
-    */
-    delete image_in;
+    
+    //delete image_in;
 	return 0;
 }
 
@@ -163,6 +163,9 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 		return NULL;
 	}
 
+	if(c.get_real() >1 || c.get_img() > 1){
+		return NULL;
+	}
 
 	if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
 
