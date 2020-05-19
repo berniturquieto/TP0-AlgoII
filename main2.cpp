@@ -17,7 +17,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
-complejo ** generate_matrix_c(double);
+complejo ** generate_matrix_c(int);
 int * binary_search(complejo, complejo **, int [2], int [2]);
 void map_image(image &, image &);
 
@@ -249,9 +249,13 @@ void read_pgm(image & img_arg){
   delete[] aux_matrix;
 }
 
+<<<<<<< HEAD
 
 
 complejo ** generate_matrix_c(double max){
+=======
+complejo ** generate_matrix_c(int max){
+>>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
 
   complejo ** matrix;
   
@@ -388,8 +392,12 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
 
 
+<<<<<<< HEAD
 
 void map_image(image & original, image & destino){
+=======
+void map_image( image & original, image & destino){
+>>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
 
   int * pos;
   int in_lim[2];
@@ -403,6 +411,13 @@ void map_image(image & original, image & destino){
 
   
 
+<<<<<<< HEAD
+=======
+  in_lim[0]=0;
+  in_lim[1]=0;
+  fin_lim[0]=max-1; //invalid operands of types ‘<unresolved overloaded function type>’ and ‘int’ to binary ‘operator-’
+  fin_lim[1]=max-1; //    "     "
+>>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
 
   for(int i=0; i < destino.get_max_dim();i++){
     for (int j = 0; j < destino.get_max_dim(); j++)
@@ -412,6 +427,7 @@ void map_image(image & original, image & destino){
       fin_lim[0]=max; 
       fin_lim[1]=max;
       aux = complex_matrix[i][j];
+<<<<<<< HEAD
       aux.print_complejo();
       aux = aux.exponencial();
       //cout<<endl;
@@ -425,6 +441,13 @@ void map_image(image & original, image & destino){
         aux_color = original.get_matrix_value(pos[1],pos[0]);
         destino.set_matrix_value(i,j,aux_color);
       }
+=======
+      aux.exponencial();
+      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
+      aux_color = original.get_matrix_value(pos[1],pos[0]);
+      destino.set_matrix_value(i,j,aux_color);
+
+>>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
 
       cout<<i<<" "<<j;
     }
