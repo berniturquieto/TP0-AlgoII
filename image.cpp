@@ -10,9 +10,9 @@ image::image(){
   width=0;    //ancho
   height=0;    // alto
   greyscale=0;
-  cout<<"aca"<<endl;
+  //cout<<"aca"<<endl;
   //this->matrix = NULL;
-  cout<<"Termino de construir"<<endl;
+  //cout<<"Termino de construir"<<endl;
 }
 
 // Constructor por parametro
@@ -138,39 +138,46 @@ void image::print_image(ostream *os){
     }
 }
 
-/* Este metodo pide memoria y llena la matriz mediante el argumento*/
+/* Este metodo pide memoria y llena la matriz mediante el argumento
+se supone que tiene las dimensiones cargadas*/
 void image::fill_matrix(int ** matrix){
-    int max=0,aux=0;      //aux me dice quien es menor si el ancho o el alto. Si es 0 W es menor, si es 1 H es menor 
+    int max=0;    // aux me dice quien es menor si el ancho o el
+                        // alto. Si es 0 W es menor, si es 1 H es menor
+    bool IS_VERTICAL = true;
    
-    if(width<height) {max = height;} else{max = width; aux = 1;}
+    if(width<height) {max = height;} else{max = width; IS_VERTICAL=false;}
 
-    this->matrix = new int*[max];
+    this->matrix = new int*[max]; // Pidio memoria
     for (int i=0 ; i<max ; i++){
       this->matrix[i] = new int[max];
     }
-
     
-    for (int i = 0; i < max; i++){
-        for (int j = 0; j < max; j++){
-          if (aux == 0)
+    for (int i = 0; i < max; i++) // Recorro la matriz cuadrada
+    {
+        for (int j = 0; j < max; j++)
+        {
+          if (IS_VERTICAL) // Para imagenes vertical
           {
-            if ( j<((max-width)/2) || j>((max+width)/2)-1 ){
+            //cout << "si es vertical, entra aca"<< endl;
+            if ( j<((max-width)/2) || j>((max+width)/2)-1 )
               this->matrix[i][j] = 0;
-            }else{
-              this->matrix[i][j] = matrix[i-(width+1)][j];
+            else{
+              cout << j-(width+1) << endl;
+              this->matrix[i][j] = matrix[i][j-(max-width)/2];
             }
           }
-          else
+          else    // Para imagenes horizontal
           {
-            if ( i<((max-height)/2)+1 || i>((max+height)/2)-1 ){
+            //cout << "si es horizontal, entra aca" << endl;
+            if ( i<((max-height)/2) || i>((max+height)/2)-1 )
               this->matrix[i][j] = 0;
-            }else{
-              this->matrix[i][j] = matrix[i-(height+1)][j];
-            }
-          }
-            
+            else
+              this->matrix[i][j] = matrix[i-(max-height)/2][j];
+          } 
         }
-        
     }
+
+    cout << "Matriz guardada: " << endl;
+    this->printMatrix();
 
 }

@@ -144,7 +144,7 @@ int main(int argc, char * const argv[]){
 se le pase como argumento. Se supone que hay un solo comentario y
 el pgm esta bien organizado*/
 void read_pgm(image & img_arg){
-  int aux, aux_size[2], aux_greyscale;
+  int aux_int, aux_size[2], aux_greyscale;
   int i=0, j=0;
   int ** aux_matrix;
   string in_string, temp;		
@@ -212,7 +212,7 @@ void read_pgm(image & img_arg){
     j++;
   }
 
-  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
+  cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << aux_greyscale << endl;
 
   for(int x=0 ; x< aux_size[1]; x++){
@@ -220,10 +220,13 @@ void read_pgm(image & img_arg){
       cout << aux_matrix[x][y] << " ";
     }
     cout << endl;
-  }*/       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
+  }       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
 
   img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
-  img_arg.printMatrix();
+  //img_arg.printMatrix();
 
-  // DESTRUIR LA MATRIZ AUXILIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
+           
+  for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+        delete[] aux_matrix[i];
+  delete[] aux_matrix;
 }
