@@ -142,8 +142,9 @@ int main(int argc, char * const argv[]){
 
 void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena la
   int aux, aux_size[2], aux_greyscale;	// imagen que se le pase como argumento. Se supone
+  int i=0, j=0;           // que hay un solo comentario y el pgm esta bien organizado
   int ** aux_matrix;
-  string in_string, temp;		// que hay un solo comentario y el pgm esta bien organizado
+  string in_string, temp;		
 
 
   getline(*iss, in_string); // Identificador
@@ -156,11 +157,11 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
 
   getline(*iss, in_string);   // Supongo que tiene un solo comentario
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
-    cout << "Encontro un comentario" << endl; // Lo salteo
+    //cout << "Encontro un comentario" << endl; // Lo salteo
   }
 
 
-  /*getline(*iss, in_string); // Dimsensiones
+  getline(*iss, in_string); // Dimsensiones
   stringstream ss (in_string);
   while(!ss.eof()){
       ss >> temp;
@@ -176,49 +177,19 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
 
   getline(*iss, in_string); // Escala de grises
   aux_greyscale = stoi(in_string);
-  img_arg.set_aux_greyscale(aux_greyscale);*/
+  img_arg.set_greyscale(aux_greyscale);
 
+  /*Crea la matriz de enteros y los llena con ceros hay que
+  tener en cuenta q la matriz va a ser cuadrada por eso se pide
+  dos veces de dimension "max"*/
 
-/*  for (i = 0; i < aux_size[1]; i++){
-    if(getline(*iss, in_string)){
-      stringstream ss (in_string);
-      for(j = 0 ; j < aux_size[0]; j++){
-        if (!ss.eof()){
-          ss >> temp;
-          if(stringstream(temp) >> aux){
-            if(aux >= 0 && aux <= aux_greyscale){
-              aux_matrix[i][j] = aux;
-              //cout << aux<< " ";
-            } else{cerr << "No esta en la aux_greyscale" << endl; exit(1);}
-          }
-          temp= "";
-        }
-      }
-    }
-  }*/
+  aux_matrix = new int*[aux_size[1]]; // Pido memoria para la cant de columnas (ancho)
+  for (int i = 0; i < aux_size[1]; i++){  // Por cada columna
+      aux_matrix[i] = new int[aux_size[0]]; // Pido cantidad de filas
+  }
+  i=0;
 
-/*while(getline(*iss, in_string)){       
-    
-    stringstream iss (in_string);       
-    size_t i=0;
-    
-    if(!(in_string.empty())){
-      while (iss>>aux)
-      {
-        aux_matrix[j][i++]=aux;
-        cout << aux << " ";
-        if(i==16) 
-          break;
-      }
-    }
-    cout << endl;
-    j++;
-    if (j==10)
-      break;
-}*/
-
-
-  /*while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
+  while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
     stringstream iss (in_string);
 
     while(!iss.eof()){
@@ -228,29 +199,19 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
 
       	if(aux >= 0 && aux <= aux_greyscale){
         	aux_matrix[j][i] = aux;
-          cout << aux << " ";
         	i++;
         } else{cerr << "No esta en la aux_greyscale" << endl; exit(1);}
 
       }
       temp = "";
     }
-    cout << endl;
     i = 0;
     j++;
-  }*/
-
-  *iss >> aux_size[0] >> aux_size[1] >> aux_greyscale;
-
-
-  /*Crea la matriz de enteros y los llena con ceros hay que
-  tener en cuenta q la matriz va a ser cuadrada por eso se pide
-  dos veces de dimension "max"*/
-  aux_matrix = new int*[aux_size[0]]; // Pido memoria para la cant de columnas (ancho)
-  for (int i = 0; i < aux_size[0]; i++){  // Por cada columna
-      aux_matrix[i] = new int[aux_size[1]]; // Pido cantidad de filas
   }
 
+  //*iss >> aux_size[0] >> aux_size[1] >> aux_greyscale;
+
+  /*
   for (int r=0 ; r<aux_size[1]; r++){
     for (int t=0; t<aux_size[0]; t++){
       *iss >> aux;
@@ -258,9 +219,9 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
       cout << aux << " ";
     }
     cout << endl;
-  }
+  }*/
 
-  cout << aux_size[0] << ", " << aux_size[1] << endl;
+  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << aux_greyscale << endl;
 
   for(int x=0 ; x< aux_size[1]; x++){
@@ -268,10 +229,10 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
       cout << aux_matrix[x][y] << " ";
     }
     cout << endl;
-  }       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
+  }*/       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
 
-  //img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
-  //img_arg.printMatrix();
+  img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
+  img_arg.printMatrix();
 
   // DESTRUIR LA MATRIZ AUXILIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
 }
