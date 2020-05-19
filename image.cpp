@@ -21,9 +21,9 @@ image::image(const int w, const int h, const int gs, int ** matrix){
     greyscale = gs;
     if(w<h){max = h;} else{max = w;}
 
-    this->matrix = new int*[max];
+    this->matrix = new int*[max+1];
     for (int i = 0; i < max; i++){  // Crea la matriz de enteros y los llena con ceros
-      this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+      this->matrix[i] = new int[max+1];   // Hay que tener en cuenta q la matriz va a ser cuadrada
     }                               // Por eso se pide dos veces de dimension "max"
 
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
