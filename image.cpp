@@ -138,42 +138,33 @@ void image::print_image(ostream *os){
     }
 }
 
-
+/* Este metodo pide memoria y llena la matriz mediante el argumento*/
 void image::fill_matrix(int ** matrix){
     int max=0,aux=0;      //aux me dice quien es menor si el ancho o el alto. Si es 0 W es menor, si es 1 H es menor 
-    if(width<height){
-      max = height;
-    }else{
-      max = width;
-      aux = 1;
-    }
-    cout<<max;
+   
+    if(width<height) {max = height;} else{max = width; aux = 1;}
+
     this->matrix = new int*[max];
-    for (int i=0 ; i<max ; i++){  // Crea la matriz de enteros y los llena con ceros
-      this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
-    }                               // Por eso se pide dos veces de dimension "max"
+    for (int i=0 ; i<max ; i++){
+      this->matrix[i] = new int[max];
+    }
 
     
-    for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
-        for (int j = 0; j < max; j++){  // co
-          cout << "i: " << i << ", " << "j: "<< j <<endl;
+    for (int i = 0; i < max; i++){
+        for (int j = 0; j < max; j++){
           if (aux == 0)
           {
             if ( j<((max-width)/2) || j>((max+width)/2)-1 ){
-              //cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
-              //cout << "aca2" << endl;
               this->matrix[i][j] = matrix[i-(width+1)][j];
             }
           }
           else
           {
             if ( i<((max-height)/2)+1 || i>((max+height)/2)-1 ){
-              cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
-              cout << "aca2" << endl;
               this->matrix[i][j] = matrix[i-(height+1)][j];
             }
           }

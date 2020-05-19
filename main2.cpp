@@ -140,9 +140,12 @@ int main(int argc, char * const argv[]){
 
 // *******************************FUNCIONES**********************************//
 
-void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena la
-  int aux, aux_size[2], aux_greyscale;	// imagen que se le pase como argumento. Se supone
-  int i=0, j=0;           // que hay un solo comentario y el pgm esta bien organizado
+/*Esta funcion lee del archivo de input y llena la imagen VACIA que
+se le pase como argumento. Se supone que hay un solo comentario y
+el pgm esta bien organizado*/
+void read_pgm(image & img_arg){
+  int aux, aux_size[2], aux_greyscale;
+  int i=0, j=0;
   int ** aux_matrix;
   string in_string, temp;		
 
@@ -155,7 +158,7 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   }
 
 
-  getline(*iss, in_string);   // Supongo que tiene un solo comentario
+  getline(*iss, in_string);   // Supongo que tiene un solo comentario, lo salteo
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
     //cout << "Encontro un comentario" << endl; // Lo salteo
   }
@@ -165,8 +168,8 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   stringstream ss (in_string);
   while(!ss.eof()){
       ss >> temp;
-      if(stringstream(temp) >> aux){  // Si puedo convertir a int, guardo
-        aux_size[i] = aux;
+      if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo
+        aux_size[i] = aux_int;
         i++;
       }
       temp = "";
@@ -179,7 +182,7 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale);
 
-  /*Crea la matriz de enteros y los llena con ceros hay que
+  /*Crea la matriz de enteros y los llena con ceros. Hay que
   tener en cuenta q la matriz va a ser cuadrada por eso se pide
   dos veces de dimension "max"*/
 
@@ -195,10 +198,10 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     while(!iss.eof()){
       iss >> temp;
 
-      if(stringstream(temp) >> aux){
+      if(stringstream(temp) >> aux_int){
 
-      	if(aux >= 0 && aux <= aux_greyscale){
-        	aux_matrix[j][i] = aux;
+      	if(aux_int >= 0 && aux_int <= aux_greyscale){
+        	aux_matrix[j][i] = aux_int;
         	i++;
         } else{cerr << "No esta en la aux_greyscale" << endl; exit(1);}
 
@@ -208,18 +211,6 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     i = 0;
     j++;
   }
-
-  //*iss >> aux_size[0] >> aux_size[1] >> aux_greyscale;
-
-  /*
-  for (int r=0 ; r<aux_size[1]; r++){
-    for (int t=0; t<aux_size[0]; t++){
-      *iss >> aux;
-      aux_matrix[r][t]= aux;
-      cout << aux << " ";
-    }
-    cout << endl;
-  }*/
 
   /*cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << aux_greyscale << endl;
