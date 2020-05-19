@@ -16,7 +16,7 @@ image::image(){
 }
 
 // Constructor por parametro
-image::image(const int w, const int h, const int gs, int ** matrix){
+image::image(const int w, const int h, const int gs){ //matriz cuadrada
 
     int max = 0;
     width = w;
@@ -31,11 +31,12 @@ image::image(const int w, const int h, const int gs, int ** matrix){
 
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
-            if (i<((max-h)/2) || i>((max+h)/2)-1){
+          this->matrix[i][j] = 0;
+            /*if (i<((max-h)/2) || i>((max+h)/2)-1){
               this->matrix[i][j] = 0;
             }else{
               this->matrix[i][j] = matrix[i-(h+1)][j];
-            }
+            }*/
         }
     }
 }
@@ -94,6 +95,15 @@ int image::get_max_dim(){
   if(width < height) {return height;}
   else{return width;}
 }
+
+void image::set_matrix_value(const int & i,const int & j,const int & aux_color){
+  matrix[i][j]=aux_color;
+}
+
+int image::get_matrix_value(const int & i,const int & j){
+  return matrix[i][j];
+}
+
 
 
 

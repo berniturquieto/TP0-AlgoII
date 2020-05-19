@@ -17,7 +17,7 @@ class image{
 
     // Contructores
   	image(); // Por defecto
-  	image(const int, const int, const int, int **);  // Constructor por argument
+  	image(const int, const int, const int);  // Constructor por argument
       //image(); // Constructor copia
   	~image();  // Destructor
   	
@@ -32,6 +32,8 @@ class image{
     void printMatrix();
     void print_image(ostream*);
     int get_max_dim();
+    void set_matrix_value(const int &,const int &,const int &);
+    int get_matrix_value(const int &,const int &);
 
     void fill_matrix(int **);
 };

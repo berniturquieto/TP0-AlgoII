@@ -17,6 +17,8 @@ static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
 complejo ** generate_matrix_c(double);
+int * binary_search(complejo, complejo **, int [2], int [2]);
+void map_image(const image &, image &);
 
 //*****************************VARIABLES GLOBALES*****************************//
 
@@ -105,15 +107,14 @@ static void opt_help(string const &arg){
 
 int main(int argc, char * const argv[]){
   image input_image;
-  image output_image;
-  complejo ** complex_matrix;
+
 
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
 	read_pgm(input_image);
 
-  complex_matrix = generate_matrix_c(input_image.get_max_dim());
+  image output_image(input_image.get_max_dim(),input_image.get_greyscale());
 
   /*for(int x=0;x<input_image.get_max_dim();x++){
       for(int y=0;y<input_image.get_max_dim();y++) {
@@ -137,7 +138,9 @@ int main(int argc, char * const argv[]){
   input_image.print_image(oss); */
   
 
+  map_image(imput_image, output_image);
 
+  output_image.print_image();
   switch(chosen_function){  
     case z:                     
       cout<< "elegite z" << endl;
@@ -266,3 +269,91 @@ complejo ** generate_matrix_c(double max){
     }
     return matrix;
 }
+
+
+
+int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
+  
+
+  //cout<<"iniciales;"<<in_lim[0]<<","<<in_lim[1]<<"  finales:"<<fin_lim[0]<<","<<fin_lim[1]<<endl;
+
+  if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
+    return NULL;
+  }
+
+  if(c.get_real() >1 || c.get_img() > 1){
+    return NULL;
+  }
+
+  if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
+
+
+    if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
+      in_lim[0] = fin_lim[0];
+    }
+    if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
+      in_lim[1] = fin_lim[1];
+    }
+    return in_lim;
+  }
+
+  int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
+  int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
+  //cout<<"medio actual:  ";
+  //matrix[medio_y][medio_x].print_complejo();
+  //cout<<endl;
+  if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
+    in_lim[0] = medio_x;
+    if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
+      fin_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }else{
+      in_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }
+
+  }else{
+    fin_lim[0] = medio_x;
+    if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
+      fin_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }else{
+      in_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }
+  } 
+}
+
+
+
+void map_image(const image & original, image & destino){
+
+  int * pos;
+  int in_lim[2];
+  int fin_lim[2];
+  int aux_color;
+  complejo aux;
+  complejo ** complex_matrix;
+
+  complex_matrix = generate_matrix_c(input_image.get_max_dim());
+
+
+  in_lim[0]=0;
+  in_lim[1]=0;
+  fin_lim[0]=max-1;
+  fin_lim[1]=max-1;
+
+  for(int i=0; i < destino.get_max_dim();i++){
+    for (int j = 0; j < destino.get_max_dim(); j++)
+    {
+      aux = complex_matrix[i][j];
+      aux.exponencial();
+      pos = binary_search(aux,matrix_c,in_lim,fin_lim);
+      aux_color = original.get_matrix_value[pos[1]][pos[0]];
+      destino.set_matrix_value(i,j,aux_color);
+
+
+    }
+
+  }
+} 
