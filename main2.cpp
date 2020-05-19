@@ -16,6 +16,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
+complejo ** generate_matrix_c(double);
 
 //*****************************VARIABLES GLOBALES*****************************//
 
@@ -103,37 +104,50 @@ static void opt_help(string const &arg){
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
-
+  image input_image;
+  image output_image;
+  complejo ** complex_matrix;
 
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
-	image input_image;
-	image output_image;
-
 	read_pgm(input_image);
-	ofs.open("prueba.pgm", ios::out);
-    oss = &ofs;
+
+  complex_matrix = generate_matrix_c(input_image.get_max_dim());
+
+  /*for(int x=0;x<input_image.get_max_dim();x++){
+      for(int y=0;y<input_image.get_max_dim();y++) {
+          complex_matrix[x][y].print_complejo();  
+          cout<<" ";
+      }
+      cout<<endl;
+
+      std::cout<<std::endl;
+  } IMPRIME LA MATRIZ DE COMPLEJOS*/
+
+  /*ofs.open("prueba.pgm", ios::out);
+  oss = &ofs;
+
+  if (!oss->good()) {
+      cerr << "cannot open "
+           << "."
+           << endl;
+      exit(1);        // EXIT: Terminación del programa en su totalidad
+  }
+  input_image.print_image(oss); */
   
-    // Verificamos que el stream este OK.
 
-    if (!oss->good()) {
-        cerr << "cannot open " << "." << endl;
-        exit(1);        // EXIT: Terminación del programa en su totalidad
-    }
-    cout << "abrio el archivo" << endl;
-    //input_image.printMatrix(oss);   ACA HAY SIGSEVVVVVVVVVVVVVVVVVVVVVVV
 
-    switch(chosen_function){  
-      case z:                     
-        cout<< "elegite z" << endl;
-        break;
-      case expz: 
-        cout<< "elegite expz" << endl;
-        break;
-      default: 
-        cout<< "lo rompite" << endl;
-    }
+  switch(chosen_function){  
+    case z:                     
+      cout<< "elegite z" << endl;
+      break;
+    case expz: 
+      cout<< "elegite expz" << endl;
+      break;
+    default: 
+      cout<< "lo rompite" << endl;
+  }
 
 	return 0;
 }
@@ -178,6 +192,7 @@ void read_pgm(image & img_arg){
   img_arg.set_height(aux_size[1]);
   i=0;
 
+
   getline(*iss, in_string); // Escala de grises
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale);
@@ -185,7 +200,6 @@ void read_pgm(image & img_arg){
   /*Crea la matriz de enteros y los llena con ceros. Hay que
   tener en cuenta q la matriz va a ser cuadrada por eso se pide
   dos veces de dimension "max"*/
-
   aux_matrix = new int*[aux_size[1]]; // Pido memoria para la cant de columnas (ancho)
   for (int i = 0; i < aux_size[1]; i++){  // Por cada columna
       aux_matrix[i] = new int[aux_size[0]]; // Pido cantidad de filas
@@ -212,7 +226,7 @@ void read_pgm(image & img_arg){
     j++;
   }
 
-  cout << aux_size[0] << ", " << aux_size[1] << endl;
+  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
   cout << aux_greyscale << endl;
 
   for(int x=0 ; x< aux_size[1]; x++){
@@ -220,13 +234,35 @@ void read_pgm(image & img_arg){
       cout << aux_matrix[x][y] << " ";
     }
     cout << endl;
-  }       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
+  } PRUEBA DE IMPRESION*/
 
-  img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
-  //img_arg.printMatrix();
-
-           
+  img_arg.fill_matrix(aux_matrix);
+ 
   for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
         delete[] aux_matrix[i];
   delete[] aux_matrix;
+}
+
+complejo ** generate_matrix_c(double max){
+
+  complejo ** matrix;
+  
+  matrix = new complejo*[(int)max]; // Pido memoria para la matriz
+  for (int i = 0; i < max; i++){  
+      matrix[i] = new complejo[(int)max];
+    }
+
+  double paso=2/(max-1);
+  double aux_real=-1;
+  double aux_imag=1;
+    for (int i = 0; i < max; i++){
+      for (int j = 0; j < max; j++){
+        matrix[i][j]=complejo(aux_real,aux_imag);
+        aux_real=aux_real+paso;
+        }
+        aux_real=-1;
+        aux_imag=aux_imag-paso;
+      
+    }
+    return matrix;
 }

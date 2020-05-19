@@ -8,10 +8,10 @@ using namespace std;
 
 class image{
   private:
-	int width; // Ancho y alto
-	int height;
-  	int greyscale;
-  	int **matrix;
+    int width; // Ancho y alto
+    int height;
+    int greyscale;
+    int **matrix;
 
 	public:
 
@@ -31,6 +31,7 @@ class image{
     int get_greyscale();
     void printMatrix();
     void print_image(ostream*);
+    int get_max_dim();
 
     void fill_matrix(int **);
 };

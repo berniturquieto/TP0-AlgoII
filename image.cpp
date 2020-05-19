@@ -90,6 +90,11 @@ int image::get_greyscale(){
   return greyscale;
 }
 
+int image::get_max_dim(){
+  if(width < height) {return height;}
+  else{return width;}
+}
+
 
 
 void image::printMatrix(){
@@ -141,11 +146,12 @@ void image::print_image(ostream *os){
 /* Este metodo pide memoria y llena la matriz mediante el argumento
 se supone que tiene las dimensiones cargadas*/
 void image::fill_matrix(int ** matrix){
-    int max=0;    // aux me dice quien es menor si el ancho o el
-                        // alto. Si es 0 W es menor, si es 1 H es menor
+    int max=0;
     bool IS_VERTICAL = true;
    
-    if(width<height) {max = height;} else{max = width; IS_VERTICAL=false;}
+    max = get_max_dim();
+    if (width>height)
+      IS_VERTICAL=false;
 
     this->matrix = new int*[max]; // Pidio memoria
     for (int i=0 ; i<max ; i++){
@@ -158,17 +164,14 @@ void image::fill_matrix(int ** matrix){
         {
           if (IS_VERTICAL) // Para imagenes vertical
           {
-            //cout << "si es vertical, entra aca"<< endl;
             if ( j<((max-width)/2) || j>((max+width)/2)-1 )
               this->matrix[i][j] = 0;
             else{
-              cout << j-(width+1) << endl;
               this->matrix[i][j] = matrix[i][j-(max-width)/2];
             }
           }
           else    // Para imagenes horizontal
           {
-            //cout << "si es horizontal, entra aca" << endl;
             if ( i<((max-height)/2) || i>((max+height)/2)-1 )
               this->matrix[i][j] = 0;
             else
@@ -176,8 +179,4 @@ void image::fill_matrix(int ** matrix){
           } 
         }
     }
-
-    cout << "Matriz guardada: " << endl;
-    this->printMatrix();
-
 }
