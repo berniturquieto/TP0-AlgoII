@@ -29,7 +29,7 @@ class image{
     void set_greyscale(const int );
     int get_greyscale();
     void printMatrix();
-    void printMatrix(ostream*);
+    void print_image(ostream*);
     void fill_matrix(int **);
 
     // Metodos

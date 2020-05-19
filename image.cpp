@@ -102,7 +102,7 @@ void image::printMatrix(){
   }
 }
 
-void image::printMatrix(ostream *os){
+void image::print_image(ostream *os){
 
     int max=0;
     if(size[0]<size[1]){max = size[1];} else{max = size[0];}
