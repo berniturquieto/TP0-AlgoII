@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 #include <cstdlib>
+#include <math.h>
 
 #include "cmdline.h"
 #include "image.h"
@@ -18,7 +19,8 @@ static void opt_help(string const &);
 void read_pgm(image &);
 complejo ** generate_matrix_c(double);
 int * binary_search(complejo, complejo **, int [2], int [2]);
-void map_image(const image &, image &);
+void map_image(image &, image &);
+
 
 //*****************************VARIABLES GLOBALES*****************************//
 
@@ -114,7 +116,7 @@ int main(int argc, char * const argv[]){
 
 	read_pgm(input_image);
 
-  image output_image(input_image.get_max_dim(),input_image.get_greyscale());
+  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
   /*for(int x=0;x<input_image.get_max_dim();x++){
       for(int y=0;y<input_image.get_max_dim();y++) {
@@ -138,9 +140,10 @@ int main(int argc, char * const argv[]){
   input_image.print_image(oss); */
   
 
-  map_image(imput_image, output_image);
+  map_image(input_image, output_image);
 
-  output_image.print_image();
+  output_image.print_image(oss);
+
   switch(chosen_function){  
     case z:                     
       cout<< "elegite z" << endl;
@@ -246,6 +249,8 @@ void read_pgm(image & img_arg){
   delete[] aux_matrix;
 }
 
+
+
 complejo ** generate_matrix_c(double max){
 
   complejo ** matrix;
@@ -258,8 +263,8 @@ complejo ** generate_matrix_c(double max){
   double paso=2/(max-1);
   double aux_real=-1;
   double aux_imag=1;
-    for (int i = 0; i < max; i++){
-      for (int j = 0; j < max; j++){
+    for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
+      for (int j = 0; j < max; j++){  // co
         matrix[i][j]=complejo(aux_real,aux_imag);
         aux_real=aux_real+paso;
         }
@@ -271,6 +276,63 @@ complejo ** generate_matrix_c(double max){
 }
 
 
+
+
+
+/*
+int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
+  
+
+  //cout<<"iniciales;"<<in_lim[0]<<","<<in_lim[1]<<"  finales:"<<fin_lim[0]<<","<<fin_lim[1]<<endl;
+
+  if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
+
+    cout<<"Retorna null 1"<<endl;
+    return NULL;
+  }
+
+  if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
+    cout<<"Retorna null 2"<<endl;
+    return NULL;
+  }
+  if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
+
+
+    if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
+      in_lim[0] = fin_lim[0];
+    }
+    if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
+      in_lim[1] = fin_lim[1];
+    }
+    return in_lim;
+  }
+
+  int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
+  int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
+  //cout<<"medio actual:  ";
+  //matrix[medio_y][medio_x].print_complejo();
+  //cout<<endl;
+  if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){ // ve en que cuadrante esta y ajusta los limites
+    in_lim[0] = medio_x;
+    if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
+      fin_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }else{
+      in_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }
+
+  }else{
+    fin_lim[0] = medio_x;
+    if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
+      fin_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }else{
+      in_lim[1] = medio_y;
+      return binary_search(c, matrix, in_lim, fin_lim);
+    }
+  } 
+}*/
 
 int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
   
@@ -326,34 +388,47 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
 
 
-void map_image(const image & original, image & destino){
+
+void map_image(image & original, image & destino){
 
   int * pos;
   int in_lim[2];
   int fin_lim[2];
   int aux_color;
+  int max = original.get_max_dim();
   complejo aux;
   complejo ** complex_matrix;
 
-  complex_matrix = generate_matrix_c(input_image.get_max_dim());
+  complex_matrix = generate_matrix_c(original.get_max_dim());
 
+  
 
-  in_lim[0]=0;
-  in_lim[1]=0;
-  fin_lim[0]=max-1;
-  fin_lim[1]=max-1;
 
   for(int i=0; i < destino.get_max_dim();i++){
     for (int j = 0; j < destino.get_max_dim(); j++)
     {
+      in_lim[0]=0;
+      in_lim[1]=0;
+      fin_lim[0]=max; 
+      fin_lim[1]=max;
       aux = complex_matrix[i][j];
-      aux.exponencial();
-      pos = binary_search(aux,matrix_c,in_lim,fin_lim);
-      aux_color = original.get_matrix_value[pos[1]][pos[0]];
-      destino.set_matrix_value(i,j,aux_color);
+      aux.print_complejo();
+      aux = aux.exponencial();
+      //cout<<endl;
+      aux.print_complejo();
+      cout<<endl;
+      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
+      if (pos !=NULL){
+        //cout<<pos[0]<<","<<pos[1]<<endl;
+        aux_color = original.get_matrix_value(pos[1],pos[0]);
+        destino.set_matrix_value(i,j,aux_color);
+        aux_color = original.get_matrix_value(pos[1],pos[0]);
+        destino.set_matrix_value(i,j,aux_color);
+      }
 
-
+      cout<<i<<" "<<j;
     }
-
+  //cout<<endl;
   }
+
 } 

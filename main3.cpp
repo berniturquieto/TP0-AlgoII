@@ -27,7 +27,7 @@ int main(void ){
 	int fin_lim[2];
 	int ** matrix;
 	complejo ** matrix_c;
-	complejo c(1,0.7);
+	complejo c(0.227116,0.353713);
 
  /*	matrix = new int*[h];
   	for (int i = 0; i < h; i++){  // Crea la matriz de enteros y los llena con ceros
