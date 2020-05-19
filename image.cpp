@@ -9,7 +9,8 @@ image::image(){
   size[0]=0;    //ancho
   size[1]=0;    // alto
   greyscale=0;
-  this->matrix=NULL;
+  this->matrix = nullptr;
+  cout<<"Termino de construir";
 }
 
 // Constructor por parametro
@@ -137,29 +138,47 @@ void image::print_image(ostream *os){
 
 
 void image::fill_matrix(int ** matrix){
-    int max=0;
-    int h=size[1];
-    if(size[0]<size[1]){max = size[1];} else{max = size[0];}
-
+    int max=0,aux=0;      //aux me dice quien es menor si el ancho o el alto. Si es 0 W es menor, si es 1 H es menor 
+    //int h=size[1];
+    if(size[0]<size[1]){
+      max = size[1];
+    }else{
+      max = size[0];
+      aux = 1;
+    }
+    cout<<max;
     this->matrix = new int*[max];
-
     for (int i=0 ; i<max ; i++){  // Crea la matriz de enteros y los llena con ceros
       this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
     }                               // Por eso se pide dos veces de dimension "max"
 
-    cout << "Max: " << max << ", " << "Height: " << h<< endl;
 
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
             //cout << "i: " << i << ", " << "j: "<< j <<endl;
-            if ( i<((max-h)/2) || i>((max+h)/2)-1 ){
+          if (aux == 0)
+          {
+            if ( j<((max-size[aux])/2) || j>((max+size[aux])/2)-1 ){
               //cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
               //cout << "aca2" << endl;
-              this->matrix[i][j] = matrix[i-(h+1)][j];
+              this->matrix[i][j] = matrix[i-(size[aux]+1)][j];
             }
+          }
+          else
+          {
+            if ( i<((max-size[aux])/2) || i>((max+size[aux])/2)-1 ){
+              //cout << "aca1"<< endl;
+              this->matrix[i][j] = 0;
+            }else{
+              //cout << "aca2" << endl;
+              this->matrix[i][j] = matrix[i-(size[aux]+1)][j];
+            }
+          }
+            
         }
+        
     }
 
 }

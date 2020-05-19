@@ -36,4 +36,6 @@ class image{
     //aca va el metodo que llene la matriz de ints
 };
 
+
+
 #endif

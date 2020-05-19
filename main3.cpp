@@ -21,7 +21,7 @@ int main(void ){
 /*	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 */
-	int w = 24, h = 7, gs = 10, max=0;
+	int w = 2, h = 3, gs = 10, max=0;
 	int * pos;
 	int in_lim[2];
 	int fin_lim[2];
@@ -29,16 +29,17 @@ int main(void ){
 	complejo ** matrix_c;
 	complejo c(0.8,0.7);
 
-/*  	matrix = new int*[h];
-  	for (int i = 0; i < w; i++){  // Crea la matriz de enteros y los llena con ceros
+ 	matrix = new int*[h];
+  	for (int i = 0; i < h; i++){  // Crea la matriz de enteros y los llena con ceros
   	    matrix[i] = new int[w];   // Hay que tener en cuenta q la matriz va a ser cuadrada
+  	    cout<<i;
   	}    
 
-	for (int i=0; i<w; i++){
+	/*for (int i=0; i<w; i++){
 		matrix[0][i]=1;
 		matrix[1][i]=2;
 		matrix[6][i]=7;
-	}
+	}*/
 	cout<<"Imagen original"<<endl;
 	for(int x=0;x<h;x++){
         for(int y=0;y<w;y++) {
@@ -48,11 +49,12 @@ int main(void ){
 
         std::cout<<std::endl;
     }
-*/
-/*
+
+
 	cout<<"Imagen original cuadrada"<<endl;
 	image image_in;
-	image_in.set_greysacle(gs);
+	cout<<"paso";
+	image_in.set_greyscale(gs);
 	image_in.set_width(w);
 	image_in.set_height(h);
 	image_in.fill_matrix(matrix);
@@ -61,7 +63,7 @@ int main(void ){
 
 	image_in.printMatrix();
 
-*/
+/*
 
 	if(w<h){max = h;} else{max = w;}
 	max=10;
@@ -75,7 +77,7 @@ int main(void ){
         cout<<endl;
 
         std::cout<<std::endl;
-    }
+    }*/
 
    /* ofs.open("prueba.pgm", ios::out);
     oss = &ofs;
@@ -94,7 +96,7 @@ int main(void ){
 
    */
 
-    in_lim[0]=0;
+    /*in_lim[0]=0;
     in_lim[1]=0;
     fin_lim[0]=max-1;
     fin_lim[1]=max-1;
@@ -116,7 +118,7 @@ int main(void ){
     }else{
     	cout<<"ERROR"<<endl;
     }
-    
+    */
 	return 0;
 }
 
