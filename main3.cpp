@@ -27,10 +27,9 @@ int main(void ){
 	int fin_lim[2];
 	int ** matrix;
 	complejo ** matrix_c;
-	complejo c(1,0.5);
+	complejo c(0.8,0.7);
 
-
-  	/*matrix = new int*[h];
+/*  	matrix = new int*[h];
   	for (int i = 0; i < w; i++){  // Crea la matriz de enteros y los llena con ceros
   	    matrix[i] = new int[w];   // Hay que tener en cuenta q la matriz va a ser cuadrada
   	}    
@@ -49,19 +48,23 @@ int main(void ){
 
         std::cout<<std::endl;
     }
-
-
+*/
+/*
 	cout<<"Imagen original cuadrada"<<endl;
-	image image_in(w,h,gs,matrix);
+	image image_in;
+	image_in.set_greysacle(gs);
+	image_in.set_width(w);
+	image_in.set_height(h);
+	image_in.fill_matrix(matrix);
 
 
 
-	image_in.printMatrix();*/
+	image_in.printMatrix();
 
-
+*/
 
 	if(w<h){max = h;} else{max = w;}
-	max=5;
+	max=10;
 	matrix_c=complex_matrix(max);
 
     for(int x=0;x<max;x++){
@@ -106,7 +109,7 @@ int main(void ){
 
     pos = binary_search(c,matrix_c,in_lim,fin_lim);
     if (pos !=NULL){
-    	cout<<"lo encontro en :"<<pos[0]<<","<<pos[1]<<endl;
+    	cout<<"lo encontro en :"<<pos[1]<<","<<pos[0]<<endl;
     	cout<<"y vale :"<<endl;
     	(matrix_c[pos[1]][pos[0]]).print_complejo();
     	cout<<endl;
@@ -153,41 +156,53 @@ complejo ** complex_matrix(double max){
 int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
 	
 
-
 	cout<<"iniciales;"<<in_lim[0]<<","<<in_lim[1]<<"  finales:"<<fin_lim[0]<<","<<fin_lim[1]<<endl;
-	if (in_lim[0]>fin_lim[0] && in_lim[1]>fin_lim[1]){
+
+	if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
 		return NULL;
 	}
 	
-	if (in_lim[0]==fin_lim[0] || in_lim[1]==fin_lim[1]){
+	/*if (in_lim[0]==fin_lim[0] || in_lim[1]==fin_lim[1]){
 		/*cout<<"SON IGUALES LLEGUE AL RESULTADO"<<endl;
 
-		cout<<in_lim[0]<<fin_lim[0]<<";"<<in_lim[1]<<fin_lim[1]<<endl;*/
+		cout<<in_lim[0]<<fin_lim[0]<<";"<<in_lim[1]<<fin_lim[1]<<endl;
+		return in_lim;
+	}*/
+
+	if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
+		cout<<"SON IGUALES LLEGUE AL RESULTADO"<<endl;
+
+		//cout<<in_lim[0]<<fin_lim[0]<<";"<<in_lim[1]<<fin_lim[1]<<endl;*/
+		if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
+			in_lim[0] = fin_lim[0];
+		}
+		if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
+			in_lim[1] = fin_lim[1];
+		}
 		return in_lim;
 	}
 
 	int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
 	int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
-
-	if (c.get_real()>= (matrix[medio_x][medio_y]).get_real()){
-
-		if (c.get_img()>= (matrix[medio_x][medio_y]).get_img()){
-			in_lim[0] = medio_x;
+	cout<<"medio actual:  ";
+	matrix[medio_y][medio_x].print_complejo();
+	cout<<endl;
+	if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
+		in_lim[0] = medio_x;
+		if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
 			fin_lim[1] = medio_y;
 			return binary_search(c, matrix, in_lim, fin_lim);
 		}else{
-			in_lim[0] = medio_x;
 			in_lim[1] = medio_y;
 			return binary_search(c, matrix, in_lim, fin_lim);
 		}
 
 	}else{
-		if (c.get_img()> (matrix[medio_x][medio_y]).get_img()){
-			fin_lim[0] = medio_x;
+		fin_lim[0] = medio_x;
+		if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
 			fin_lim[1] = medio_y;
 			return binary_search(c, matrix, in_lim, fin_lim);
 		}else{
-			fin_lim[0] = medio_x;
 			in_lim[1] = medio_y;
 			return binary_search(c, matrix, in_lim, fin_lim);
 		}
