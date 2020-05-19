@@ -246,9 +246,9 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
   /*Crea la matriz de enteros y los llena con ceros hay que
   tener en cuenta q la matriz va a ser cuadrada por eso se pide
   dos veces de dimension "max"*/
-  aux_matrix = new int*[aux_size[1]]; // Pido memoria para la cant de columnas (ancho)
-  for (int j = 0; j < aux_size[1]; j++){  // Por cada columna
-      aux_matrix[j] = new int[aux_size[0]]; // Pido cantidad de filas
+  aux_matrix = new int*[aux_size[0]]; // Pido memoria para la cant de columnas (ancho)
+  for (int i = 0; i < aux_size[0]; i++){  // Por cada columna
+      aux_matrix[i] = new int[aux_size[1]]; // Pido cantidad de filas
   }
 
   for (int r=0 ; r<aux_size[1]; r++){
@@ -270,8 +270,8 @@ void read_pgm(image & img_arg){// Esta funcion lee del archivo de input y llena 
     cout << endl;
   }       //PRUEBAS DE IMPRESION antes de mandar a llena la matriz de img
 
-  img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
-  img_arg.printMatrix();
+  //img_arg.fill_matrix(aux_matrix);   //ACA HAY SIGSEVVVVVVVVVVVVVVVVVVV
+  //img_arg.printMatrix();
 
   // DESTRUIR LA MATRIZ AUXILIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
 }

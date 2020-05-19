@@ -16,7 +16,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
-complejo ** generate_matrix_c(double);
+complejo ** generate_matrix_c(int);
 int * binary_search(complejo, complejo **, int [2], int [2]);
 void map_image(const image &, image &);
 
@@ -114,7 +114,7 @@ int main(int argc, char * const argv[]){
 
 	read_pgm(input_image);
 
-  image output_image(input_image.get_max_dim(),input_image.get_greyscale());
+  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
   /*for(int x=0;x<input_image.get_max_dim();x++){
       for(int y=0;y<input_image.get_max_dim();y++) {
@@ -138,9 +138,10 @@ int main(int argc, char * const argv[]){
   input_image.print_image(oss); */
   
 
-  map_image(imput_image, output_image);
+  map_image(input_image, output_image);
 
-  output_image.print_image();
+  output_image.print_image(oss);
+
   switch(chosen_function){  
     case z:                     
       cout<< "elegite z" << endl;
@@ -246,7 +247,7 @@ void read_pgm(image & img_arg){
   delete[] aux_matrix;
 }
 
-complejo ** generate_matrix_c(double max){
+complejo ** generate_matrix_c(int max){
 
   complejo ** matrix;
   
@@ -326,7 +327,7 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
 
 
-void map_image(const image & original, image & destino){
+void map_image( image & original, image & destino){
 
   int * pos;
   int in_lim[2];
@@ -335,21 +336,21 @@ void map_image(const image & original, image & destino){
   complejo aux;
   complejo ** complex_matrix;
 
-  complex_matrix = generate_matrix_c(input_image.get_max_dim());
+  complex_matrix = generate_matrix_c(original.get_max_dim());
 
 
   in_lim[0]=0;
   in_lim[1]=0;
-  fin_lim[0]=max-1;
-  fin_lim[1]=max-1;
+  fin_lim[0]=max-1; //invalid operands of types ‘<unresolved overloaded function type>’ and ‘int’ to binary ‘operator-’
+  fin_lim[1]=max-1; //    "     "
 
   for(int i=0; i < destino.get_max_dim();i++){
     for (int j = 0; j < destino.get_max_dim(); j++)
     {
       aux = complex_matrix[i][j];
       aux.exponencial();
-      pos = binary_search(aux,matrix_c,in_lim,fin_lim);
-      aux_color = original.get_matrix_value[pos[1]][pos[0]];
+      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
+      aux_color = original.get_matrix_value(pos[1],pos[0]);
       destino.set_matrix_value(i,j,aux_color);
 
 
