@@ -6,19 +6,21 @@ using namespace std;
 // Constructor por defecto
 image::image(){
 
-  size[0]=0;    //ancho
-  size[1]=0;    // alto
+  
+  width=0;    //ancho
+  height=0;    // alto
   greyscale=0;
-  this->matrix = nullptr;
-  cout<<"Termino de construir";
+  cout<<"aca"<<endl;
+  //this->matrix = NULL;
+  cout<<"Termino de construir"<<endl;
 }
 
 // Constructor por parametro
 image::image(const int w, const int h, const int gs, int ** matrix){
 
     int max = 0;
-    size[0] = w;
-    size[1] = h;
+    width = w;
+    height = h;
     greyscale = gs;
     if(w<h){max = h;} else{max = w;}
 
@@ -49,7 +51,7 @@ todo el vector de matrix, hago free de matrix.*/
 image::~image(){ 
   int max = 0;
 
-  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
+  if(width<height){max = height;} else{max = width;}
 
   if (matrix){                
     for (int i = 0; i<max; i++){    
@@ -65,19 +67,19 @@ image::~image(){
 // Setter y getters
 
 void image::set_width(const int A){
-  size[0] = A;
+  width = A;
 }
 
 int image::get_width(){
-  return size[0];
+  return width;
 }
 
 void image::set_height(const int A){
-  size[1] = A;
+  height = A;
 }
 
 int image::get_height(){
-  return size[1];
+  return height;
 }
 
 void image::set_greyscale(const int A){
@@ -93,7 +95,7 @@ int image::get_greyscale(){
 void image::printMatrix(){
   int max=0;
 
-  if(size[0]<size[1]){max = size[1];} else{max = size[0];}
+  if(width<height){max = height;} else{max = width;}
 
   for(int x=0 ; x<max ; x++){
     for(int y=0 ; y<max ; y++) {
@@ -106,7 +108,7 @@ void image::printMatrix(){
 void image::print_image(ostream *os){
 
     int max=0;
-    if(size[0]<size[1]){max = size[1];} else{max = size[0];}
+    if(width<height){max = height;} else{max = width;}
 
     *os << "P2"<<'\n'<<max<<" "<<max<<'\n'<<greyscale<<'\n';
     if (os->bad()) {
@@ -139,11 +141,10 @@ void image::print_image(ostream *os){
 
 void image::fill_matrix(int ** matrix){
     int max=0,aux=0;      //aux me dice quien es menor si el ancho o el alto. Si es 0 W es menor, si es 1 H es menor 
-    //int h=size[1];
-    if(size[0]<size[1]){
-      max = size[1];
+    if(width<height){
+      max = height;
     }else{
-      max = size[0];
+      max = width;
       aux = 1;
     }
     cout<<max;
@@ -152,28 +153,28 @@ void image::fill_matrix(int ** matrix){
       this->matrix[i] = new int[max];   // Hay que tener en cuenta q la matriz va a ser cuadrada
     }                               // Por eso se pide dos veces de dimension "max"
 
-
+    
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
         for (int j = 0; j < max; j++){  // co
-            //cout << "i: " << i << ", " << "j: "<< j <<endl;
+          cout << "i: " << i << ", " << "j: "<< j <<endl;
           if (aux == 0)
           {
-            if ( j<((max-size[aux])/2) || j>((max+size[aux])/2)-1 ){
+            if ( j<((max-width)/2) || j>((max+width)/2)-1 ){
               //cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
               //cout << "aca2" << endl;
-              this->matrix[i][j] = matrix[i-(size[aux]+1)][j];
+              this->matrix[i][j] = matrix[i-(width+1)][j];
             }
           }
           else
           {
-            if ( i<((max-size[aux])/2) || i>((max+size[aux])/2)-1 ){
-              //cout << "aca1"<< endl;
+            if ( i<((max-height)/2)+1 || i>((max+height)/2)-1 ){
+              cout << "aca1"<< endl;
               this->matrix[i][j] = 0;
             }else{
-              //cout << "aca2" << endl;
-              this->matrix[i][j] = matrix[i-(size[aux]+1)][j];
+              cout << "aca2" << endl;
+              this->matrix[i][j] = matrix[i-(height+1)][j];
             }
           }
             

@@ -21,7 +21,7 @@ int main(void ){
 /*	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 */
-	int w = 2, h = 3, gs = 10, max=0;
+	int w = 1, h = 5, gs = 10, max=0;
 	int * pos;
 	int in_lim[2];
 	int fin_lim[2];
@@ -35,11 +35,9 @@ int main(void ){
   	    cout<<i;
   	}    
 
-	/*for (int i=0; i<w; i++){
-		matrix[0][i]=1;
-		matrix[1][i]=2;
-		matrix[6][i]=7;
-	}*/
+	for (int i=0; i<w; i++){
+		matrix[i][0]=5;
+	}
 	cout<<"Imagen original"<<endl;
 	for(int x=0;x<h;x++){
         for(int y=0;y<w;y++) {
@@ -49,19 +47,19 @@ int main(void ){
 
         std::cout<<std::endl;
     }
-
-
 	cout<<"Imagen original cuadrada"<<endl;
-	image image_in;
-	cout<<"paso";
-	image_in.set_greyscale(gs);
-	image_in.set_width(w);
-	image_in.set_height(h);
-	image_in.fill_matrix(matrix);
 
 
+	image *image_in = new image();
+	cout<<"paso"<<endl;
 
-	image_in.printMatrix();
+	image_in->set_greyscale(gs);
+	image_in->set_width(w);
+	image_in->set_height(h);
+	image_in->fill_matrix(matrix);
+
+
+	image_in->printMatrix();
 
 /*
 
@@ -119,6 +117,7 @@ int main(void ){
     	cout<<"ERROR"<<endl;
     }
     */
+    delete image_in;
 	return 0;
 }
 
