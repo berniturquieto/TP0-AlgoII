@@ -27,7 +27,7 @@ int main(void ){
 	int fin_lim[2];
 	int ** matrix;
 	complejo ** matrix_c;
-	complejo c(0.227116,0.353713);
+	complejo c(0.34,-0.78);
 
  /*	matrix = new int*[h];
   	for (int i = 0; i < h; i++){  // Crea la matriz de enteros y los llena con ceros
@@ -63,7 +63,7 @@ int main(void ){
 
 
 */
-	if(w<h){max = h;} else{max = w;}
+	/*if(w<h){max = h;} else{max = w;}
 	max=10;
 	matrix_c=complex_matrix(max);
 
@@ -75,7 +75,7 @@ int main(void ){
         cout<<endl;
 
         std::cout<<std::endl;
-    }
+    }*/
 
    /* ofs.open("prueba.pgm", ios::out);
     oss = &ofs;
@@ -93,6 +93,7 @@ int main(void ){
 
 
    */
+	c= c.exponencial();
 
     in_lim[0]=0;
     in_lim[1]=0;

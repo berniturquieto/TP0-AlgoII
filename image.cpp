@@ -151,6 +151,7 @@ void image::print_image(ostream *os){
             exit(1);
         } 
     }
+
 }
 
 /* Este metodo pide memoria y llena la matriz mediante el argumento
@@ -163,9 +164,18 @@ void image::fill_matrix(int ** matrix){
     if (width>height)
       IS_VERTICAL=false;
 
+
     this->matrix = new int*[max]; // Pidio memoria
     for (int i=0 ; i<max ; i++){
       this->matrix[i] = new int[max];
+    }
+    if (width == height){
+      for (int i = 0; i < max; i++) // Recorro la matriz cuadrada
+      {
+        for (int j = 0; j < max; j++){
+          this->matrix[i][j] = matrix[i][j];
+        }
+      }
     }
     
     for (int i = 0; i < max; i++) // Recorro la matriz cuadrada

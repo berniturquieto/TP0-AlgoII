@@ -115,9 +115,9 @@ int main(int argc, char * const argv[]){
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
 	read_pgm(input_image);
-  cout<<"termino de leer la entrada"<<endl;
-  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
+  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
+  //input_image.printMatrix();
   /*for(int x=0;x<input_image.get_max_dim();x++){
       for(int y=0;y<input_image.get_max_dim();y++) {
           complex_matrix[x][y].print_complejo();  
@@ -128,6 +128,10 @@ int main(int argc, char * const argv[]){
       std::cout<<std::endl;
   } IMPRIME LA MATRIZ DE COMPLEJOS*/
 
+  
+
+  map_image(input_image, output_image);
+
   ofs.open("prueba.pgm", ios::out);
   oss = &ofs;
 
@@ -137,12 +141,9 @@ int main(int argc, char * const argv[]){
            << endl;
       exit(1);        // EXIT: Terminación del programa en su totalidad
   }
-  input_image.print_image(oss);
-  
-
-  map_image(input_image, output_image);
-
+  //ofs.close();
   output_image.print_image(oss);
+  //output_image.print_image(oss);
 
   switch(chosen_function){  
     case z:                     
@@ -172,7 +173,7 @@ void read_pgm(image & img_arg){
 
   getline(*iss, in_string); // Identificador
   in_string.pop_back();
-  if (in_string != PGM_IDENTIFIER){
+  if (in_string[0] != PGM_IDENTIFIER[0] && in_string[1] != PGM_IDENTIFIER[1]){
     cerr<< "No es PGM" <<endl;
     exit(1);
   }
@@ -181,10 +182,11 @@ void read_pgm(image & img_arg){
   getline(*iss, in_string);   // Supongo que tiene un solo comentario, lo salteo
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
     //cout << "Encontro un comentario" << endl; // Lo salteo
+    getline(*iss, in_string); // Dimsensiones
+
   }
 
-
-  getline(*iss, in_string); // Dimsensiones
+  
   stringstream ss (in_string);
   while(!ss.eof()){
       ss >> temp;
@@ -197,7 +199,7 @@ void read_pgm(image & img_arg){
   img_arg.set_width(aux_size[0]);
   img_arg.set_height(aux_size[1]);
   i=0;
-  cout<<"Tamano:  "<<aux_size[0]<<", "<<aux_size[1]<<endl;
+  
 
   getline(*iss, in_string); // Escala de grises
   aux_greyscale = stoi(in_string);
@@ -206,40 +208,24 @@ void read_pgm(image & img_arg){
   /*Crea la matriz de enteros y los llena con ceros. Hay que
   tener en cuenta q la matriz va a ser cuadrada por eso se pide
   dos veces de dimension "max"*/
-  aux_matrix = new int*[aux_size[1]]; // Pido memoria para la cant de columnas (ancho)
-  for (int i = 0; i < aux_size[1]; i++){  // Por cada columna
-      aux_matrix[i] = new int[aux_size[0]]; // Pido cantidad de filas
+  aux_matrix = new int*[aux_size[1]]; 
+  for (int i = 0; i < aux_size[1]; i++){  
+      aux_matrix[i] = new int[aux_size[0]]; 
   }
 
-  cout<<"pidio bien memoria"<<endl;
-  i=0;
 
-  while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
-    stringstream iss (in_string);
 
-    while(!iss.eof()){
-      iss >> temp;
-      cout<<"lee: "<<temp<<endl;
-
-      if(stringstream(temp) >> aux_int){
-
-      	if(aux_int >= 0 && aux_int <= aux_greyscale){
-        	aux_matrix[j][i] = aux_int;
-        	i++;
-        } else{cerr << "No esta en la aux_greyscale" << endl; exit(1);}
-
-      }
-      cout<<"contadores: i="<<i<<" j="<<j<<endl;
-      temp = "";
+  for (int i = 0; i < aux_size[1]; i++)
+  {
+    for (int j = 0; j < aux_size[0]; j++)
+    {
+      *iss >> aux_int;
+      aux_matrix[i][j] = aux_int;
     }
-    i = 0;
-    j++;
   }
 
-  /*cout << aux_size[0] << ", " << aux_size[1] << endl;
-  cout << aux_greyscale << endl;
 
-  for(int x=0 ; x< aux_size[1]; x++){
+  /*for(int x=0 ; x< aux_size[1]; x++){
     for(int y=0 ; y< aux_size[0]; y++){
       cout << aux_matrix[x][y] << " ";
     }
@@ -295,7 +281,7 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
     return NULL;
   }
 
-  if(c.get_real() >1 || c.get_img() > 1){
+  if(c.get_real() > 1 || c.get_img() > 1){
     return NULL;
   }
 
@@ -313,9 +299,8 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
   int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
-  //cout<<"medio actual:  ";
-  //matrix[medio_y][medio_x].print_complejo();
-  //cout<<endl;
+
+
   if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
     in_lim[0] = medio_x;
     if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
@@ -356,11 +341,10 @@ void map_image(image & original, image & destino){
 
   
 
-
   in_lim[0]=0;
   in_lim[1]=0;
-  fin_lim[0]=max-1; //invalid operands of types ‘<unresolved overloaded function type>’ and ‘int’ to binary ‘operator-’
-  fin_lim[1]=max-1; //    "     "
+  fin_lim[0]=max-1; 
+  fin_lim[1]=max-1; 
 
 
   for(int i=0; i < destino.get_max_dim();i++){
@@ -371,30 +355,17 @@ void map_image(image & original, image & destino){
       fin_lim[0]=max-1; 
       fin_lim[1]=max-1;
       aux = complex_matrix[i][j];
-/**/
-      aux.print_complejo();
+
       aux = aux.exponencial();
-      //cout<<endl;
-      aux.print_complejo();
-      cout<<endl;
+
       pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
       if (pos !=NULL){
-        //cout<<pos[0]<<","<<pos[1]<<endl;
+        //cout<<pos[1]<<","<<pos[0]<<endl;
         aux_color = original.get_matrix_value(pos[1],pos[0]);
-        destino.set_matrix_value(i,j,aux_color);
-        aux_color = original.get_matrix_value(pos[1],pos[0]);
+        //cout<<"color: "<<aux_color<<endl;
         destino.set_matrix_value(i,j,aux_color);
       }
-/*      aux.exponencial();
-      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
-      aux_color = original.get_matrix_value(pos[1],pos[0]);
-      destino.set_matrix_value(i,j,aux_color);
-
->>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a*/
-
-      cout<<i<<" "<<j;
     }
-  //cout<<endl;
   }
 
 } 
