@@ -17,7 +17,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void read_pgm(image &);
-complejo ** generate_matrix_c(int);
+complejo ** generate_matrix_c(double);
 int * binary_search(complejo, complejo **, int [2], int [2]);
 void map_image(image &, image &);
 
@@ -115,7 +115,7 @@ int main(int argc, char * const argv[]){
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
 	read_pgm(input_image);
-
+  cout<<"termino de leer la entrada"<<endl;
   image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
   /*for(int x=0;x<input_image.get_max_dim();x++){
@@ -128,7 +128,7 @@ int main(int argc, char * const argv[]){
       std::cout<<std::endl;
   } IMPRIME LA MATRIZ DE COMPLEJOS*/
 
-  /*ofs.open("prueba.pgm", ios::out);
+  ofs.open("prueba.pgm", ios::out);
   oss = &ofs;
 
   if (!oss->good()) {
@@ -137,7 +137,7 @@ int main(int argc, char * const argv[]){
            << endl;
       exit(1);        // EXIT: Terminación del programa en su totalidad
   }
-  input_image.print_image(oss); */
+  input_image.print_image(oss);
   
 
   map_image(input_image, output_image);
@@ -197,7 +197,7 @@ void read_pgm(image & img_arg){
   img_arg.set_width(aux_size[0]);
   img_arg.set_height(aux_size[1]);
   i=0;
-
+  cout<<"Tamano:  "<<aux_size[0]<<", "<<aux_size[1]<<endl;
 
   getline(*iss, in_string); // Escala de grises
   aux_greyscale = stoi(in_string);
@@ -210,6 +210,8 @@ void read_pgm(image & img_arg){
   for (int i = 0; i < aux_size[1]; i++){  // Por cada columna
       aux_matrix[i] = new int[aux_size[0]]; // Pido cantidad de filas
   }
+
+  cout<<"pidio bien memoria"<<endl;
   i=0;
 
   while(getline(*iss, in_string)){	// Relleno matriz, agarro primer linea
@@ -217,6 +219,7 @@ void read_pgm(image & img_arg){
 
     while(!iss.eof()){
       iss >> temp;
+      cout<<"lee: "<<temp<<endl;
 
       if(stringstream(temp) >> aux_int){
 
@@ -226,6 +229,7 @@ void read_pgm(image & img_arg){
         } else{cerr << "No esta en la aux_greyscale" << endl; exit(1);}
 
       }
+      cout<<"contadores: i="<<i<<" j="<<j<<endl;
       temp = "";
     }
     i = 0;
@@ -241,6 +245,8 @@ void read_pgm(image & img_arg){
     }
     cout << endl;
   } PRUEBA DE IMPRESION*/
+  cout<<"guardo la imagen en la matriz"<<endl;
+
 
   img_arg.fill_matrix(aux_matrix);
  
@@ -249,13 +255,10 @@ void read_pgm(image & img_arg){
   delete[] aux_matrix;
 }
 
-<<<<<<< HEAD
 
 
 complejo ** generate_matrix_c(double max){
-=======
-complejo ** generate_matrix_c(int max){
->>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
+
 
   complejo ** matrix;
   
@@ -282,61 +285,6 @@ complejo ** generate_matrix_c(int max){
 
 
 
-
-/*
-int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
-  
-
-  //cout<<"iniciales;"<<in_lim[0]<<","<<in_lim[1]<<"  finales:"<<fin_lim[0]<<","<<fin_lim[1]<<endl;
-
-  if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
-
-    cout<<"Retorna null 1"<<endl;
-    return NULL;
-  }
-
-  if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
-    cout<<"Retorna null 2"<<endl;
-    return NULL;
-  }
-  if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
-
-
-    if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
-      in_lim[0] = fin_lim[0];
-    }
-    if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
-      in_lim[1] = fin_lim[1];
-    }
-    return in_lim;
-  }
-
-  int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
-  int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
-  //cout<<"medio actual:  ";
-  //matrix[medio_y][medio_x].print_complejo();
-  //cout<<endl;
-  if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){ // ve en que cuadrante esta y ajusta los limites
-    in_lim[0] = medio_x;
-    if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
-      fin_lim[1] = medio_y;
-      return binary_search(c, matrix, in_lim, fin_lim);
-    }else{
-      in_lim[1] = medio_y;
-      return binary_search(c, matrix, in_lim, fin_lim);
-    }
-
-  }else{
-    fin_lim[0] = medio_x;
-    if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
-      fin_lim[1] = medio_y;
-      return binary_search(c, matrix, in_lim, fin_lim);
-    }else{
-      in_lim[1] = medio_y;
-      return binary_search(c, matrix, in_lim, fin_lim);
-    }
-  } 
-}*/
 
 int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
   
@@ -392,12 +340,9 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
 
 
-<<<<<<< HEAD
+
 
 void map_image(image & original, image & destino){
-=======
-void map_image( image & original, image & destino){
->>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
 
   int * pos;
   int in_lim[2];
@@ -411,23 +356,22 @@ void map_image( image & original, image & destino){
 
   
 
-<<<<<<< HEAD
-=======
+
   in_lim[0]=0;
   in_lim[1]=0;
   fin_lim[0]=max-1; //invalid operands of types ‘<unresolved overloaded function type>’ and ‘int’ to binary ‘operator-’
   fin_lim[1]=max-1; //    "     "
->>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
+
 
   for(int i=0; i < destino.get_max_dim();i++){
     for (int j = 0; j < destino.get_max_dim(); j++)
     {
       in_lim[0]=0;
       in_lim[1]=0;
-      fin_lim[0]=max; 
-      fin_lim[1]=max;
+      fin_lim[0]=max-1; 
+      fin_lim[1]=max-1;
       aux = complex_matrix[i][j];
-<<<<<<< HEAD
+/**/
       aux.print_complejo();
       aux = aux.exponencial();
       //cout<<endl;
@@ -441,13 +385,12 @@ void map_image( image & original, image & destino){
         aux_color = original.get_matrix_value(pos[1],pos[0]);
         destino.set_matrix_value(i,j,aux_color);
       }
-=======
-      aux.exponencial();
+/*      aux.exponencial();
       pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
       aux_color = original.get_matrix_value(pos[1],pos[0]);
       destino.set_matrix_value(i,j,aux_color);
 
->>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a
+>>>>>>> 11d4587718ec2454d4d3a58f383ef6b7e6423a7a*/
 
       cout<<i<<" "<<j;
     }
