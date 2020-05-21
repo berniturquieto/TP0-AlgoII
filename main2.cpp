@@ -339,7 +339,10 @@ void map_image(image & original, image & destino){
 
   complex_matrix = generate_matrix_c(original.get_max_dim());
 
-  
+	if ( max % 2 != 0){
+    max--;
+    cout << max << endl;
+	}
 
   in_lim[0]=0;
   in_lim[1]=0;
