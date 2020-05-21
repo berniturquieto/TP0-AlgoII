@@ -8,7 +8,7 @@
 #include "cmdline.h"
 #include "image.h"
 
-using namespace std;
+using namespace std; 
 
 //************************DECLARACION FUNCIONES************************//
 
