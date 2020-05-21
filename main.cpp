@@ -29,7 +29,7 @@ static option_t options[] = {
 	{0, },
 };
 
-enum functions {z, expz, conjugar};
+enum functions {z, expz, conjugar, inversa, logaritmo, seno,pow2};
 static functions chosen_function = z;
 
 // **********************************MAIN**********************************//
@@ -54,6 +54,18 @@ int main(int argc, char * const argv[]){
 		case conjugar:
 			map_image(input_image, output_image, &complejo::conjugar);
 			break;
+		case inversa:
+			map_image(input_image, output_image, &complejo::inversa);
+		break;
+		case logaritmo:
+			map_image(input_image, output_image, &complejo::logaritmo);
+		break;
+		case seno:
+			map_image(input_image, output_image, &complejo::seno);
+		break;
+		case pow2:
+			map_image(input_image, output_image, &complejo::pow2);
+		break;
 		default: 
 			cerr<< "Error en seleccion de funcion" << endl;
 			exit(1);
@@ -101,6 +113,10 @@ static void opt_function(string const &arg){
 
   else if (arg == FUNCTION_EXPZ) {chosen_function = expz; }
   else if (arg == FUNCTION_CONJUGAR) {chosen_function = conjugar; }
+  else if (arg == FUNCTION_INVERSA) {chosen_function = inversa; } 
+  else if (arg == FUNCTION_LOGARITMO) {chosen_function = logaritmo; }
+  else if (arg == FUNCTION_SENO) {chosen_function = seno; }
+  else if (arg == FUNCTION_POW) {chosen_function = pow2; }
   else {
     cerr << "Funcion invalida" << endl;
     exit(1);

@@ -15,6 +15,10 @@
 #define FUNCTION_Z "z"
 #define FUNCTION_EXPZ "expz"
 #define FUNCTION_CONJUGAR "conjugar"
+#define FUNCTION_INVERSA "inversa"
+#define FUNCTION_LOGARITMO "log"
+#define FUNCTION_SENO "sin"
+#define FUNCTION_POW "pow"
 #define NUL '\0'
 
 struct option_t {

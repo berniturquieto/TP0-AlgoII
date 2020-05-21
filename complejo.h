@@ -40,6 +40,10 @@ public:
 	// Funciones
 	complejo exponencial ();
 	complejo conjugar (); // Conjuga el complejo
+	complejo inversa ();  // Calcula la inversa
+	complejo logaritmo();
+	complejo seno();
+	complejo pow2();
 
 
 private:
