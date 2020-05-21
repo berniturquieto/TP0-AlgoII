@@ -29,11 +29,13 @@ class image{
     int get_height();
     void set_greyscale(const int );
     int get_greyscale();
-    void printMatrix();
-    void print_image(ostream*);
     int get_max_dim();
     void set_matrix_value(const int &,const int &,const int &);
     int get_matrix_value(const int &,const int &);
+
+    // Printers
+    void printMatrix();
+    void print_image(ostream*);
 
     void fill_matrix(int **);
 };

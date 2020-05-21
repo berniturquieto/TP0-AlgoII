@@ -56,14 +56,6 @@ void complejo::print_complejo(){
 	cout <<"(" << real << "," << img << ")";
 }
 
-// CONJUGAR
-complejo complejo::conjugar (){
-	complejo aux;
-	aux.real = this->real;
-	aux.img = -(this->img);
-	return aux;
-}
-
 // Operador SUMA
 complejo complejo::operator + (const complejo & complejo_a_sumar){
 	complejo aux;
@@ -139,6 +131,7 @@ complejo & complejo::operator = (const complejo & complejo_a_igualar){
 
  // Funciones
 
+// EXPONENCIAL
 complejo complejo::exponencial(){
 
   complejo aux;
@@ -150,6 +143,14 @@ complejo complejo::exponencial(){
   aux.img = modulo*sin(angulo);
 
   return aux;
+}
+
+// CONJUGAR
+complejo complejo::conjugar (){
+	complejo aux;
+	aux.real = this->real;
+	aux.img = -(this->img);
+	return aux;
 }
 
 

@@ -26,9 +26,6 @@ public:
 	// Printer
 	void print_complejo();
 
-	// Transformaciones
-	complejo conjugar (); // Conjuga el complejo
-
 	// Operadores
 	complejo operator + (const complejo &); // Suma de complejos
 	complejo operator + (const double &);
@@ -42,6 +39,7 @@ public:
 
 	// Funciones
 	complejo exponencial ();
+	complejo conjugar (); // Conjuga el complejo
 
 
 private:

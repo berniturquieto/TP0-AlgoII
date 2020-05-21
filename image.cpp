@@ -5,14 +5,9 @@ using namespace std;
 
 // Constructor por defecto
 image::image(){
-
-  
   width=0;    //ancho
   height=0;    // alto
   greyscale=0;
-  //cout<<"aca"<<endl;
-  //this->matrix = NULL;
-  //cout<<"Termino de construir"<<endl;
 }
 
 // Constructor por parametro
@@ -64,7 +59,6 @@ image::~image(){
   delete[] matrix;
 }
 
-
 // Setter y getters
 
 void image::set_width(const int A){
@@ -103,9 +97,6 @@ void image::set_matrix_value(const int & i,const int & j,const int & aux_color){
 int image::get_matrix_value(const int & i,const int & j){
   return matrix[i][j];
 }
-
-
-
 
 void image::printMatrix(){
   int max=0;
@@ -151,11 +142,10 @@ void image::print_image(ostream *os){
             exit(1);
         } 
     }
-
 }
 
-/* Este metodo pide memoria y llena la matriz mediante el argumento
-se supone que tiene las dimensiones cargadas*/
+/* Este metodo pide memoria y llena la matriz mediante el argumento.
+Se supone que tiene las dimensiones cargadas*/
 void image::fill_matrix(int ** matrix){
     int max=0;
     bool IS_VERTICAL = true;
@@ -185,7 +175,7 @@ void image::fill_matrix(int ** matrix){
           if (IS_VERTICAL) // Para imagenes vertical
           {
             if ( j<((max-width)/2) || j>((max+width)/2)-1 )
-              this->matrix[i][j] = 0;
+              this->matrix[i][j] = greyscale;
             else{
               this->matrix[i][j] = matrix[i][j-(max-width)/2];
             }
@@ -193,7 +183,7 @@ void image::fill_matrix(int ** matrix){
           else    // Para imagenes horizontal
           {
             if ( i<((max-height)/2) || i>((max+height)/2)-1 )
-              this->matrix[i][j] = 0;
+              this->matrix[i][j] = greyscale;
             else
               this->matrix[i][j] = matrix[i-(max-height)/2][j];
           } 

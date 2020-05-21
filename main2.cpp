@@ -16,10 +16,11 @@ static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
+
 void read_pgm(image &);
 complejo ** generate_matrix_c(double);
 int * binary_search(complejo, complejo **, int [2], int [2]);
-void map_image(image &, image &);
+void map_image(image &, image &, complejo (complejo::*function_pointer)(void));
 
 
 //*****************************VARIABLES GLOBALES*****************************//
@@ -40,11 +41,12 @@ static option_t options[] = {
 	{0, },
 };
 
-enum functions {z, expz};
+enum functions {z, expz, conjugar};
 static functions chosen_function = z;
 
 #define FUNCTION_Z "z"
 #define FUNCTION_EXPZ "expz"
+#define FUNCTION_CONJUGAR "conjugar"
 #define NUL '\0'
 
 //************************FUNCIONES DE CMDLINE************************//
@@ -93,7 +95,8 @@ static void opt_function(string const &arg){
   if (arg == FUNCTION_Z || arg == "-") {chosen_function = z;}
 
   else if (arg == FUNCTION_EXPZ) {chosen_function = expz; }
-  else{
+  else if (arg == FUNCTION_CONJUGAR) {chosen_function = conjugar; }
+  else {
     cerr << "Funcion invalida" << endl;
     exit(1);
   }
@@ -110,63 +113,41 @@ static void opt_help(string const &arg){
 int main(int argc, char * const argv[]){
   image input_image;
 
-
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
 	read_pgm(input_image);
 
   image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
-  //input_image.printMatrix();
-  /*for(int x=0;x<input_image.get_max_dim();x++){
-      for(int y=0;y<input_image.get_max_dim();y++) {
-          complex_matrix[x][y].print_complejo();  
-          cout<<" ";
-      }
-      cout<<endl;
-
-      std::cout<<std::endl;
-  } IMPRIME LA MATRIZ DE COMPLEJOS*/
-
-  
-
-  map_image(input_image, output_image);
-
-  ofs.open("prueba.pgm", ios::out);
-  oss = &ofs;
-
-  if (!oss->good()) {
-      cerr << "cannot open "
-           << "."
-           << endl;
-      exit(1);        // EXIT: Terminación del programa en su totalidad
-  }
-  //ofs.close();
-  output_image.print_image(oss);
-  //output_image.print_image(oss);
 
   switch(chosen_function){  
-    case z:                     
-      cout<< "elegite z" << endl;
+    case z:                  
+      input_image.print_image(oss);
       break;
     case expz: 
-      cout<< "elegite expz" << endl;
+      map_image(input_image, output_image, &complejo::exponencial);
+      break;
+    case conjugar:
+      map_image(input_image, output_image, &complejo::conjugar);
       break;
     default: 
-      cout<< "lo rompite" << endl;
+      cerr<< "Error en seleccion de funcion" << endl;
   }
+
+  output_image.print_image(oss);
 
 	return 0;
 }
 
 // *******************************FUNCIONES**********************************//
 
+
 /*Esta funcion lee del archivo de input y llena la imagen VACIA que
 se le pase como argumento. Se supone que hay un solo comentario y
 el pgm esta bien organizado*/
 void read_pgm(image & img_arg){
   int aux_int, aux_size[2], aux_greyscale;
-  int i=0, j=0;
+  int i=0;
   int ** aux_matrix;
   string in_string, temp;		
 
@@ -206,14 +187,12 @@ void read_pgm(image & img_arg){
   img_arg.set_greyscale(aux_greyscale);
 
   /*Crea la matriz de enteros y los llena con ceros. Hay que
-  tener en cuenta q la matriz va a ser cuadrada por eso se pide
+  tener en cuenta q la matriz va a sedr cuadrada por eso se pide
   dos veces de dimension "max"*/
   aux_matrix = new int*[aux_size[1]]; 
   for (int i = 0; i < aux_size[1]; i++){  
       aux_matrix[i] = new int[aux_size[0]]; 
   }
-
-
 
   for (int i = 0; i < aux_size[1]; i++)
   {
@@ -223,15 +202,6 @@ void read_pgm(image & img_arg){
       aux_matrix[i][j] = aux_int;
     }
   }
-
-
-  /*for(int x=0 ; x< aux_size[1]; x++){
-    for(int y=0 ; y< aux_size[0]; y++){
-      cout << aux_matrix[x][y] << " ";
-    }
-    cout << endl;
-  } PRUEBA DE IMPRESION*/
-  cout<<"guardo la imagen en la matriz"<<endl;
 
 
   img_arg.fill_matrix(aux_matrix);
@@ -244,8 +214,6 @@ void read_pgm(image & img_arg){
 
 
 complejo ** generate_matrix_c(double max){
-
-
   complejo ** matrix;
   
   matrix = new complejo*[(int)max]; // Pido memoria para la matriz
@@ -269,24 +237,17 @@ complejo ** generate_matrix_c(double max){
 }
 
 
-
-
-
 int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
   
-
-  //cout<<"iniciales;"<<in_lim[0]<<","<<in_lim[1]<<"  finales:"<<fin_lim[0]<<","<<fin_lim[1]<<endl;
-
   if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
     return NULL;
   }
 
-  if(c.get_real() > 1 || c.get_img() > 1){
+  if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
     return NULL;
   }
 
   if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
-
 
     if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
       in_lim[0] = fin_lim[0];
@@ -299,7 +260,6 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
   int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
-
 
   if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
     in_lim[0] = medio_x;
@@ -324,10 +284,7 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 }
 
 
-
-
-
-void map_image(image & original, image & destino){
+void map_image(image & original, image & destino, complejo(complejo::*function_pointer)(void)){
 
   int * pos;
   int in_lim[2];
@@ -338,11 +295,6 @@ void map_image(image & original, image & destino){
   complejo ** complex_matrix;
 
   complex_matrix = generate_matrix_c(original.get_max_dim());
-
-	if ( max % 2 != 0){
-    max--;
-    cout << max << endl;
-	}
 
   in_lim[0]=0;
   in_lim[1]=0;
@@ -359,13 +311,11 @@ void map_image(image & original, image & destino){
       fin_lim[1]=max-1;
       aux = complex_matrix[i][j];
 
-      aux = aux.exponencial();
+      aux = (aux.*function_pointer)();
 
       pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
       if (pos !=NULL){
-        //cout<<pos[1]<<","<<pos[0]<<endl;
         aux_color = original.get_matrix_value(pos[1],pos[0]);
-        //cout<<"color: "<<aux_color<<endl;
         destino.set_matrix_value(i,j,aux_color);
       }
     }
