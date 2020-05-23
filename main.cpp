@@ -5,23 +5,11 @@
 #include <cstdlib>
 #include <math.h>
 
-#include "cmdline.h"
 #include "image.h"
+#include "complejo.h"
+#include "main.h"
 
 using namespace std; 
-
-//************************DECLARACION FUNCIONES************************//
-
-static void opt_input(string const &);
-static void opt_output(string const &);
-static void opt_function(string const &);
-static void opt_help(string const &);
-
-void read_pgm(image &);
-complejo ** generate_matrix_c(double);
-int * binary_search(complejo, complejo **, int [2], int [2]);
-void map_image(image &, image &, complejo (complejo::*function_pointer)(void));
-
 
 //*****************************VARIABLES GLOBALES*****************************//
 
@@ -44,10 +32,36 @@ static option_t options[] = {
 enum functions {z, expz, conjugar};
 static functions chosen_function = z;
 
-#define FUNCTION_Z "z"
-#define FUNCTION_EXPZ "expz"
-#define FUNCTION_CONJUGAR "conjugar"
-#define NUL '\0'
+// **********************************MAIN**********************************//
+
+int main(int argc, char * const argv[]){
+	image input_image;
+
+	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
+	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+
+	read_pgm(input_image);
+
+	image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
+
+	switch(chosen_function){  
+		case z:                  
+			input_image.print_image(oss);
+			break;
+		case expz: 
+      		map_image(input_image, output_image, &complejo::exponencial);
+      		break;
+		case conjugar:
+			map_image(input_image, output_image, &complejo::conjugar);
+			break;
+		default: 
+			cerr<< "Error en seleccion de funcion" << endl;
+			exit(1);
+	}
+
+	output_image.print_image(oss);
+	return 0;
+}
 
 //************************FUNCIONES DE CMDLINE************************//
 
@@ -58,16 +72,11 @@ static void opt_input(string const &arg){
 	}
 	else {
 		ifs.open(arg.c_str(), ios::in);
-
 		iss = &ifs;
 	}
-
 	// Verificamos que el stream este OK.
 	if (!iss->good()) {
-		cerr << "cannot open "
-		     << arg
-		     << "."
-		     << endl;
+		cerr << "cannot open "<< arg<< "."<< endl;
 		exit(1);
 	}
 }
@@ -80,12 +89,8 @@ static void opt_output(string const &arg){
 		ofs.open(arg.c_str(), ios::out);
 		oss = &ofs;
 	}
-
 	if (!oss->good()) {
-		cerr << "cannot open "
-		     << arg
-		     << "."
-		     << endl;
+		cerr << "cannot open "<< arg<< "."<< endl;
 		exit(1);
 	}
 }
@@ -108,36 +113,128 @@ static void opt_help(string const &arg){
 	exit(0);
 }
 
-// **********************************MAIN**********************************//
+//***********************METODOS DE CMDLINE***********************//
 
-int main(int argc, char * const argv[]){
-  image input_image;
+cmdline::cmdline(){}
 
-	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
-	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+cmdline::cmdline(option_t *table) : option_table(table){
+	/* 
+	- Lo mismo que hacer:
 
-	read_pgm(input_image);
+	option_table = table;
 
-  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
+	Siendo "option_table" un atributo de la clase cmdline
+	y table un puntero a objeto o struct de "option_t".
+	
+	Se estaría contruyendo una instancia de la clase cmdline
+	cargandole los datos que se hayan en table (la table con
+	las opciones, ver el código en main.cc)
 
-  switch(chosen_function){  
-    case z:                  
-      input_image.print_image(oss);
-      break;
-    case expz: 
-      map_image(input_image, output_image, &complejo::exponencial);
-      break;
-    case conjugar:
-      map_image(input_image, output_image, &complejo::conjugar);
-      break;
-    default: 
-      cerr<< "Error en seleccion de funcion" << endl;
-  }
-
-  output_image.print_image(oss);
-
-	return 0;
+	*/
 }
+
+void cmdline::parse(int argc, char * const argv[]) {
+#define END_OF_OPTIONS(p)       \
+	((p)->short_name == 0   \
+	 && (p)->long_name == 0 \
+	 && (p)->parse == 0)
+
+	for (option_t *op = option_table; !END_OF_OPTIONS(op); ++op)
+		op->flags &= ~OPT_SEEN;
+
+	for (int i = 1; i < argc; ++i) {
+
+		if (argv[i][0] != '-') {
+			cerr << "Invalid non-option argument: "
+			     << argv[i]
+			     << endl;
+			exit(1);
+		}
+
+		if (argv[i][1] == '-'
+		    && argv[i][2] == 0)
+			break;
+
+		if (argv[i][1] == '-')
+			i += do_long_opt(&argv[i][2], argv[i + 1]);
+		else
+			i += do_short_opt(&argv[i][1], argv[i + 1]);
+	}
+
+	for (option_t *op = option_table; !END_OF_OPTIONS(op); ++op) {
+#define OPTION_NAME(op) \
+	(op->short_name ? op->short_name : op->long_name)
+		if (op->flags & OPT_SEEN)
+			continue;
+		if (op->flags & OPT_MANDATORY) {
+			cerr << "Option "<< "-"<< OPTION_NAME(op)<< " is mandatory."<< "\n";
+			exit(1);
+		}
+		if (op->def_value == 0)
+			continue;
+		op->parse(string(op->def_value));
+	}
+}
+
+int cmdline::do_long_opt(const char *opt, const char *arg) {
+	// Recorremos la tabla de opciones, y buscamos la
+	// entrada larga que se corresponda con la opción de 
+	// línea de comandos. De no encontrarse, indicamos el
+	// error.
+	//
+	for (option_t *op = option_table; op->long_name != 0; ++op) {
+		if (string(opt) == string(op->long_name)) {
+			// Marcamos esta opción como usada en
+			// forma explícita, para evitar tener
+			// que inicializarla con el valor por
+			// defecto.
+			//
+			op->flags |= OPT_SEEN;
+
+			if (op->has_arg) {
+				if (arg == 0) { // Verificamos que se provea un argumento
+					cerr << "Option requires argument: "<< "--"<< opt<< "\n";
+					exit(1);
+				}
+				op->parse(string(arg));
+				return 1;
+			} else {
+				op->parse(string("")); // Opción sin argumento.
+				return 0;
+			}
+		}
+	}
+	// Error: opción no reconocida.
+	cerr << "Unknown option: "<< "--"<< opt<< "."<< endl;
+	exit(1);
+	return -1;
+}
+
+int cmdline::do_short_opt(const char *opt, const char *arg) {
+	option_t *op;
+
+	for (op = option_table; op->short_name != 0; ++op) {
+
+		if (string(opt) == string(op->short_name)) {
+			op->flags |= OPT_SEEN;
+			if (op->has_arg) {
+				if (arg == 0) {	
+					cerr << "Option requires argument: "<< "-"<< opt<< "\n";
+					exit(1);
+				}
+				op->parse(string(arg));
+				return 1;
+			} else {
+				op->parse(string(""));
+				return 0;
+			}
+		}
+	}
+	cerr << "Unknown option: "<< "-"<< opt << "." << endl;
+	exit(1);
+	return -1;
+}
+
 
 // *******************************FUNCIONES**********************************//
 
@@ -186,6 +283,7 @@ void read_pgm(image & img_arg){
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale);
 
+
   /*Crea la matriz de enteros y los llena con ceros. Hay que
   tener en cuenta q la matriz va a sedr cuadrada por eso se pide
   dos veces de dimension "max"*/
@@ -204,13 +302,12 @@ void read_pgm(image & img_arg){
   }
 
 
-  img_arg.fill_matrix(aux_matrix);
+  img_arg.fill_matrix(aux_matrix);  // Lleno la matriz de imagen
  
   for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
         delete[] aux_matrix[i];
   delete[] aux_matrix;
 }
-
 
 
 complejo ** generate_matrix_c(double max){
