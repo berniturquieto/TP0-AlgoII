@@ -326,27 +326,26 @@ void read_pgm(image & img_arg){
 }
 
 
-complejo ** generate_matrix_c(double max){
-  complejo ** matrix;
+void generate_matrix_c(double max, complejo *** matrix){
   
-  matrix = new complejo*[(int)max]; // Pido memoria para la matriz
+  (*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
   for (int i = 0; i < max; i++){  
-      matrix[i] = new complejo[(int)max];
-    }
+      (*matrix)[i] = new complejo[(int)max];
+   }
 
   double paso=2/(max-1);
   double aux_real=-1;
   double aux_imag=1;
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
       for (int j = 0; j < max; j++){  // co
-        matrix[i][j]=complejo(aux_real,aux_imag);
+        (*matrix)[i][j]=complejo(aux_real,aux_imag);
         aux_real=aux_real+paso;
         }
         aux_real=-1;
         aux_imag=aux_imag-paso;
       
     }
-    return matrix;
+
 }
 
 
@@ -407,7 +406,7 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
   complejo aux;
   complejo ** complex_matrix;
 
-  complex_matrix = generate_matrix_c(original.get_max_dim());
+  generate_matrix_c(original.get_max_dim(), &complex_matrix);
 
   in_lim[0]=0;
   in_lim[1]=0;
@@ -433,5 +432,13 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
       }
     }
   }
+  
+  for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
+      if (complex_matrix[i]){          
+        delete[] complex_matrix[i];
+      }
+    }
+  
+  delete[] complex_matrix;
 
 } 
