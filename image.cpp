@@ -175,7 +175,7 @@ void image::fill_matrix(int ** matrix){
           if (IS_VERTICAL) // Para imagenes vertical
           {
             if ( j<((max-width)/2) || j>((max+width)/2)-1 )
-              this->matrix[i][j] = greyscale;
+              this->matrix[i][j] = 0;
             else{
               this->matrix[i][j] = matrix[i][j-(max-width)/2];
             }
@@ -183,7 +183,7 @@ void image::fill_matrix(int ** matrix){
           else    // Para imagenes horizontal
           {
             if ( i<((max-height)/2) || i>((max+height)/2)-1 )
-              this->matrix[i][j] = greyscale;
+              this->matrix[i][j] = 0;
             else
               this->matrix[i][j] = matrix[i-(max-height)/2][j];
           } 
