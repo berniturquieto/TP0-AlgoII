@@ -47,6 +47,7 @@ int main(int argc, char * const argv[]){
 	switch(chosen_function){  
 		case z:                  
 			input_image.print_image(oss);
+			return 0;
 			break;
 		case expz: 
       		map_image(input_image, output_image, &complejo::exponencial);
@@ -349,22 +350,30 @@ void generate_matrix_c(double max, complejo *** matrix){
 }
 
 
-int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
-  
+int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
+
+  	// Esta funcion realiza la cusqueda del complejo c en la mtriz matrix recivida por punteroa traves del metodo binario de busqueda de
+  	// forma recursiva. in_lim y fin_lim representan
+  	// los limites inferiores y superiores respectivamente, de donde se encuentra el valor c o el mas proximo a este.
+	// Se prueba que los limites iniciales sean menores a los finales, de no ser asi se devuleve NULL
   if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
     return NULL;
   }
+  // Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
+  // sino retorna NULL
 
   if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
     return NULL;
   }
 
+  // Caso base:
+  // En este c
   if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
 
-    if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
+    if (abs(c.get_real() - ((*matrix)[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_real())){
       in_lim[0] = fin_lim[0];
     }
-    if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
+    if (abs(c.get_img() - ((*matrix)[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_img())){
       in_lim[1] = fin_lim[1];
     }
     return in_lim;
@@ -373,9 +382,9 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
   int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
 
-  if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
+  if (c.get_real()>= ((*matrix)[medio_y][medio_x]).get_real()){
     in_lim[0] = medio_x;
-    if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
+    if (c.get_img()>= ((*matrix)[medio_y][medio_x]).get_img()){
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -385,7 +394,7 @@ int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2
 
   }else{
     fin_lim[0] = medio_x;
-    if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
+    if (c.get_img()>=((*matrix)[medio_y][medio_x]).get_img()){
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -425,7 +434,7 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
 
       aux = (aux.*function_pointer)();
 
-      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
+      pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
       if (pos !=NULL){
         aux_color = original.get_matrix_value(pos[1],pos[0]);
         destino.set_matrix_value(i,j,aux_color);
