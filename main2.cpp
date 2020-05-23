@@ -122,7 +122,7 @@ int main(int argc, char * const argv[]){
 
   switch(chosen_function){  
     case z:                  
-      input_image.print_image(oss);
+      output_image=input_image;
       break;
     case expz: 
       map_image(input_image, output_image, &complejo::exponencial);
