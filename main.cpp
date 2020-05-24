@@ -328,46 +328,48 @@ void read_pgm(image & img_arg){
 
 
 void generate_matrix_c(double max, complejo *** matrix){
-  
-  (*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
-  for (int i = 0; i < max; i++){  
-      (*matrix)[i] = new complejo[(int)max];
-   }
 
-  double paso=2/(max-1);
-  double aux_real=-1;
-  double aux_imag=1;
-    for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
-      for (int j = 0; j < max; j++){  // co
+	// Esta funcion genera una matriz de complejos con valores que van desde el -1-i hasta el 1+i formando un
+	// rectangulo de lado 2, con el centro del plano complejo en el centro de la matriz.
+  
+  	(*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
+  	for (int i = 0; i < max; i++){  
+    	(*matrix)[i] = new complejo[(int)max];
+   	}
+
+  	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+  	double aux_real=-1;
+ 	double aux_imag=1;
+
+ 	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
+    for (int i = 0; i < max; i++){    	
+      for (int j = 0; j < max; j++){  
         (*matrix)[i][j]=complejo(aux_real,aux_imag);
-        aux_real=aux_real+paso;
+        aux_real=aux_real+paso;			// Se ajusta el valor para la proxima posicion
         }
-        aux_real=-1;
-        aux_imag=aux_imag-paso;
+        aux_real=-1;					// Se reinicia el valor del x ya que recorre por filas
+        aux_imag=aux_imag-paso;			// Se ajusta el valor para la proxima posicion
       
     }
 
 }
 
 
-int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
+int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fin_lim[2]){
 
-  	// Esta funcion realiza la cusqueda del complejo c en la mtriz matrix recivida por punteroa traves del metodo binario de busqueda de
-  	// forma recursiva. in_lim y fin_lim representan
-  	// los limites inferiores y superiores respectivamente, de donde se encuentra el valor c o el mas proximo a este.
+  	// Esta funcion realiza la busqueda del complejo c en la matriz matrix recibida por puntero a traves del metodo binario de busqueda de
+  	// forma recursiva. in_lim y fin_lim son arreglos de dos posiciones, en la primer posicion de cada uno se encuentra el valor inicial y final
+  	// para las filas y en la segunda los mismos pero para las columnas.
+  	// El valor que retorna es la posición de la matiz de donde se encuentra el valor c o el mas proximo a este.
 	// Se prueba que los limites iniciales sean menores a los finales, de no ser asi se devuleve NULL
   if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
     return NULL;
   }
-  // Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
-  // sino retorna NULL
 
-  if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
-    return NULL;
-  }
 
   // Caso base:
-  // En este c
+  // Cuando se llega a una porcion de matriz de 2x2 se fija cual de los cuatro valores es el más proximo a c y ajusta los limites para 
+  // retornar el vector correspondiente
   if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
 
     if (abs(c.get_real() - ((*matrix)[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_real())){
@@ -379,12 +381,16 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
     return in_lim;
   }
 
+  // Se calcula la posicion del medio
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
   int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
 
-  if (c.get_real()>= ((*matrix)[medio_y][medio_x]).get_real()){
+  // Se evalua si la parte real del complejo es mayor a la prate real del medio, y luego lo mismo
+  // para la parte imaginaria. Luego se ajustan los limites para el proximo llamado.
+
+  if (c.get_real()>= ((*matrix)[medio_y][medio_x]).get_real()){ // Se fija si se encuentra en el semiplano derecho
     in_lim[0] = medio_x;
-    if (c.get_img()>= ((*matrix)[medio_y][medio_x]).get_img()){
+    if (c.get_img()>= ((*matrix)[medio_y][medio_x]).get_img()){	// Se fija si se encuentra en el semiplano superior
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -394,7 +400,7 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
 
   }else{
     fin_lim[0] = medio_x;
-    if (c.get_img()>=((*matrix)[medio_y][medio_x]).get_img()){
+    if (c.get_img()>=((*matrix)[medio_y][medio_x]).get_img()){ // Se fija si se encuentra en el semiplano superior
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -415,31 +421,40 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
   complejo aux;
   complejo ** complex_matrix;
 
+  // Se genera la matriz de complejos de tamaño max por max
   generate_matrix_c(original.get_max_dim(), &complex_matrix);
 
-  in_lim[0]=0;
-  in_lim[1]=0;
-  fin_lim[0]=max-1; 
-  fin_lim[1]=max-1; 
-
-
+  // Se recorre la matriz de complejos para transformar cada uno de los puntos.
+  // Los indices de la matriz de complejos coinciden con los de la matriz destino, por lo tanto 
+  // alcanza con recorrer solo una de las dos.
   for(int i=0; i < destino.get_max_dim();i++){
     for (int j = 0; j < destino.get_max_dim(); j++)
     {
-      in_lim[0]=0;
-      in_lim[1]=0;
-      fin_lim[0]=max-1; 
-      fin_lim[1]=max-1;
-      aux = complex_matrix[i][j];
+    	// Se inicializan los limites para la busqueda binaria
+      	in_lim[0]=0;
+      	in_lim[1]=0;
+      	fin_lim[0]=max-1; 
+      	fin_lim[1]=max-1;
 
-      aux = (aux.*function_pointer)();
+      	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
+      	aux = complex_matrix[i][j];
 
-      pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
-      if (pos !=NULL){
-        aux_color = original.get_matrix_value(pos[1],pos[0]);
-        destino.set_matrix_value(i,j,aux_color);
-      }
-    }
+      	aux = (aux.*function_pointer)();
+
+  		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
+  		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
+  		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
+    		pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
+    	 	if (pos !=NULL){ 		// Si se detecta un error se termina el progrma
+    	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
+        		destino.set_matrix_value(i,j,aux_color);
+      		}
+      		else {
+      			exit(1);
+      		}
+    	}
+  	}
+      
   }
   
   for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
