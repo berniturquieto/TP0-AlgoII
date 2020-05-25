@@ -267,12 +267,14 @@ void read_pgm(image & img_arg){
 
 
   getline(*iss, in_string); // Identificador
-  in_string.pop_back();
-  if (in_string[0] != PGM_IDENTIFIER[0] && in_string[1] != PGM_IDENTIFIER[1]){
-    cerr<< "No es PGM" <<endl;
-    exit(1);
-  }
 
+  if (in_string[0] == PGM_IDENTIFIER[0]){
+  	if (in_string[1] != PGM_IDENTIFIER[1]){
+    	cerr<< "No es PGM" <<endl;
+    	exit(1);
+  	}
+	}
+	else {cerr<< "No es PGM" <<endl; exit(1);}
 
   getline(*iss, in_string);   // Supongo que tiene un solo comentario, lo salteo
   if (in_string[0] == SKIP_LINE_IDENTIFIER){
@@ -291,6 +293,7 @@ void read_pgm(image & img_arg){
       }
       temp = "";
   }
+  
   img_arg.set_width(aux_size[0]);
   img_arg.set_height(aux_size[1]);
   i=0;
