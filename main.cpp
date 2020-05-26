@@ -268,14 +268,21 @@ bool read_pgm(image & img_arg){
 
   stringstream ss (in_string);
   while(!ss.eof()){
-      ss >> temp;
-      if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
-        aux_size[i] = aux_int;
-        i++;
-      }
+  	if (i==2)
+  	{
+  	cerr<<"Error de formato."<<endl;
+  	return false;
+  	}
+    ss >> temp;
+    if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
+      aux_size[i] = aux_int;
+      i++;
+    }
 
       temp = "";
   }
+
+
 
   
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
