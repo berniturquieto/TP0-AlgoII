@@ -37,15 +37,15 @@ image::image(const int w, const int h, const int gs){
 
 // Destructor
 image::~image(){ 
-  int max = 0;
+  //int max = 0;
 
-  if(width<height){max = height;} else{max = width;}
+  int max = this->get_max_dim();
 
   if (matrix){                
     for (int i = 0; i<max; i++){    
-      if (matrix[i]){          
+      //if (matrix[i]){          
         delete[] matrix[i]; // Libera la memoria pedida para crear la matriz
-      }
+      //}
     }
   }
   delete[] matrix;

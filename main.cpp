@@ -41,7 +41,7 @@ int main(int argc, char * const argv[]){
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
 
 	if(!read_pgm(input_image)){    // Se lee la imagen de intrada
-		cerr<<"Fallo el archivo"<<endl;
+		cerr<<"Fallo en el archivo"<<endl;
 		return 1;
 	}
 	
@@ -256,10 +256,10 @@ bool read_pgm(image & img_arg){
   if (in_string[0] == PGM_IDENTIFIER[0]){
   	if (in_string[1] != PGM_IDENTIFIER[1]){
     	cerr<< "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
-    	exit(1);
+    	return false;
   	}
 	}
-	else {cerr<< "No es PGM" <<endl; exit(1);}
+	else {cerr<< "No es PGM" <<endl; return false;}
 
   getline(*iss, in_string);
   if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario.
@@ -273,8 +273,10 @@ bool read_pgm(image & img_arg){
         aux_size[i] = aux_int;
         i++;
       }
+
       temp = "";
   }
+
   
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
   img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
@@ -298,7 +300,17 @@ bool read_pgm(image & img_arg){
     for (int j = 0; j < aux_size[0]; j++){
     	*iss >> aux_int;
     	if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
-    		aux_matrix[i][j] = aux_int;
+    		if (aux_int <= aux_greyscale && aux_int >= 0)
+    		{
+    			aux_matrix[i][j] = aux_int;
+    		}else{
+    			cerr<<"Error. Elemento de fuera de rango."<<endl; // En caso que haya menos elementos,
+    			for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
+        		delete[] aux_matrix[i];
+  				delete[] aux_matrix;
+    			return false;
+    		}
+    		
 
     	}else{
     		cerr<<"Error. Hay menos elementos."<<endl; // En caso que haya menos elementos,
@@ -322,10 +334,11 @@ bool read_pgm(image & img_arg){
 
 
   img_arg.fill_matrix(aux_matrix);  // Se llena la matriz de imagen
- 
+
   for (int i = 0; i<aux_size[1]; i++)   // Se destruye la matriz auxiliar              
         delete[] aux_matrix[i];
   delete[] aux_matrix;
+
   return true;
 }
 
@@ -335,23 +348,23 @@ void generate_matrix_c(double max, complejo *** matrix){
 	// Esta funcion genera una matriz de complejos con valores que van desde el -1-i hasta el 1+i formando un
 	// rectangulo de lado 2, con el centro del plano complejo en el centro de la matriz.
   
-  	(*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
-  	for (int i = 0; i < max; i++){  
-    	(*matrix)[i] = new complejo[(int)max];
-   	}
+  (*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
+  for (int i = 0; i < max; i++){  
+   	(*matrix)[i] = new complejo[(int)max];
+  }
 
-  	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
-  	double aux_real=-1;
+  double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+  double aux_real=-1;
  	double aux_imag=1;
 
  	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
-    for (int i = 0; i < max; i++){    	
-      for (int j = 0; j < max; j++){  
-        (*matrix)[i][j]=complejo(aux_real,aux_imag);
-        aux_real=aux_real+paso; // Se ajusta el valor para la proxima posicion
-        }
-        aux_real=-1;					  // Se reinicia el valor del x ya que recorre por filas
-        aux_imag=aux_imag-paso; // Se ajusta el valor para la proxima posicion
+  for (int i = 0; i < max; i++){    	
+    for (int j = 0; j < max; j++){  
+      (*matrix)[i][j]=complejo(aux_real,aux_imag);
+      aux_real=aux_real+paso; // Se ajusta el valor para la proxima posicion
+      }
+      aux_real=-1;					  // Se reinicia el valor del x ya que recorre por filas
+      aux_imag=aux_imag-paso; // Se ajusta el valor para la proxima posicion
     }
 }
 
@@ -367,6 +380,7 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
     return NULL;
   }
 
+
   // Caso base:
   // Cuando se llega a una porcion de matriz de 2x2 se fija cual de los cuatro valores es el más proximo a c y ajusta los limites para 
   // retornar el vector correspondiente
@@ -379,7 +393,12 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
       in_lim[1] = fin_lim[1];
     }
     return in_lim;
+  }else if ((fin_lim[0]-in_lim[0]) == 0 && (fin_lim[1]-in_lim[1]) == 0){ 	// Si encontro el valor exacto lo devuelve. Solo llegar si la matri
+   																																				//de la imagen original es de 1x1 porque sino va a terminar en el cb anterior.
+  	in_lim[1] = fin_lim[1];
+  	return in_lim;
   }
+
 
   // Se calcula la posicion del medio
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
