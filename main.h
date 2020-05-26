@@ -44,19 +44,14 @@ void map_image(image &, image &, complejo (complejo::*function_pointer)(void));
 
 
 class cmdline {
-	// Este atributo apunta a la tabla que describe todas
-	// las opciones a procesar. Por el momento, sólo puede
-	// ser modificado mediante contructor, y debe finalizar
-	// con un elemento nulo.
-	//
+	// Este atributo apunta a la tabla que describe todas las opciones a procesar. 
+	// Por el momento, sólo puede ser modificado mediante contructor, y debe finalizar con un elemento nulo.
+
 	option_t *option_table;
 
-	// El constructor por defecto cmdline::cmdline(), es
-	// privado, para evitar construir "parsers" (analizador 
-	// sintáctico, recibe una palabra y lo interpreta en 
-	// una acción dependiendo su significado para el programa) 
-	// sin opciones. Es decir, objetos de esta clase sin opciones.
-	//
+	// El constructor por defecto cmdline::cmdline(), es privado, para evitar construir "parsers" 
+	// (analizador sintáctico, recibe una palabra y lo interpreta en una acción dependiendo su 
+	// significado para el programa sin opciones. Es decir, objetos de esta clase sin opciones.
 
 	cmdline();
 	int do_long_opt(const char *, const char *);
