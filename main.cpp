@@ -29,7 +29,7 @@ static option_t options[] = {
 	{0, },
 };
 
-enum functions {z, expz, conjugar, inversa, logaritmo, seno,pow2};
+enum functions {z, expz, conjugar, inversa, logaritmo, seno, pow2};
 static functions chosen_function = z;
 
 // **********************************MAIN**********************************//
@@ -37,16 +37,18 @@ static functions chosen_function = z;
 int main(int argc, char * const argv[]){
 	image input_image;
 
-	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
-	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
+	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
 
-	if(!read_pgm(input_image)){
+	if(!read_pgm(input_image)){    // Se lee la imagen de intrada
 		cerr<<"Fallo el archivo"<<endl;
 		return 1;
 	}
 	
+  // Se declara la imagen de salida a partir de las dimenciones de la imagen de entrada
 	image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
+  // Switch que, a partir del parámetro ingresado por consola, define que función implementar mediante puntero a función
 	switch(chosen_function){  
 		case z:                  
 			input_image.print_image(oss);
@@ -75,7 +77,9 @@ int main(int argc, char * const argv[]){
 			return 1;
 	}
 
+  // Se imprime la imagen de salida
 	output_image.print_image(oss);
+
 	return 0;
 }
 
@@ -84,7 +88,7 @@ int main(int argc, char * const argv[]){
 static void opt_input(string const &arg){
 
 	if (arg == "-") {
-		iss = &cin;		// Establezco la entrada estandar cin como flujo de entrada
+		iss = &cin;		// Se establece la entrada estandar cin como flujo de entrada
 	}
 	else {
 		ifs.open(arg.c_str(), ios::in);
@@ -99,8 +103,8 @@ static void opt_input(string const &arg){
 
 static void opt_output(string const &arg){
 
-	if (arg == "-") {	// Veo si el input es -, si es: 
-		oss = &cout;	// Establezco la salida estandar cout como flujo de salida
+	if (arg == "-") {	// Si el input es -,
+		oss = &cout;	// se establece la salida estandar cout como flujo de salida
 	} else {
 		ofs.open(arg.c_str(), ios::out);
 		oss = &ofs;
@@ -113,7 +117,7 @@ static void opt_output(string const &arg){
 
 static void opt_function(string const &arg){
 
-  if (arg == FUNCTION_Z || arg == "-") {chosen_function = z;}
+  if (arg == FUNCTION_Z || arg == "-") {chosen_function = z;} // Se establece la función estandar z
 
   else if (arg == FUNCTION_EXPZ) {chosen_function = expz; }
   else if (arg == FUNCTION_CONJUGAR) {chosen_function = conjugar; }
@@ -127,9 +131,9 @@ static void opt_function(string const &arg){
   }
 }
 
-static void opt_help(string const &arg){
-	cout << "cmdline -f function [-i file] [-o file]"
-	     << endl;
+static void opt_help(string const &arg){  // La opción -h imprime el formato de ejecución
+  cout << "cmdline -f function [-i file] [-o file]" << endl;
+  cout << "funciones: z, expz, conjugar, inversa, log, sin, pow" << endl;
 	exit(0);
 }
 
@@ -137,21 +141,7 @@ static void opt_help(string const &arg){
 
 cmdline::cmdline(){}
 
-cmdline::cmdline(option_t *table) : option_table(table){
-	/* 
-	- Lo mismo que hacer:
-
-	option_table = table;
-
-	Siendo "option_table" un atributo de la clase cmdline
-	y table un puntero a objeto o struct de "option_t".
-	
-	Se estaría contruyendo una instancia de la clase cmdline
-	cargandole los datos que se hayan en table (la table con
-	las opciones, ver el código en main.cc)
-
-	*/
-}
+cmdline::cmdline(option_t *table) : option_table(table){}
 
 void cmdline::parse(int argc, char * const argv[]) {
 #define END_OF_OPTIONS(p)       \
@@ -165,9 +155,7 @@ void cmdline::parse(int argc, char * const argv[]) {
 	for (int i = 1; i < argc; ++i) {
 
 		if (argv[i][0] != '-') {
-			cerr << "Invalid non-option argument: "
-			     << argv[i]
-			     << endl;
+			cerr << "Argumento inválido." << argv[i] << endl;
 			exit(1);
 		}
 
@@ -187,7 +175,7 @@ void cmdline::parse(int argc, char * const argv[]) {
 		if (op->flags & OPT_SEEN)
 			continue;
 		if (op->flags & OPT_MANDATORY) {
-			cerr << "Option "<< "-"<< OPTION_NAME(op)<< " is mandatory."<< "\n";
+			cerr << "Opción "<< "-"<< OPTION_NAME(op)<< " es obligatoria."<< "\n";
 			exit(1);
 		}
 		if (op->def_value == 0)
@@ -197,23 +185,18 @@ void cmdline::parse(int argc, char * const argv[]) {
 }
 
 int cmdline::do_long_opt(const char *opt, const char *arg) {
-	// Recorremos la tabla de opciones, y buscamos la
-	// entrada larga que se corresponda con la opción de 
-	// línea de comandos. De no encontrarse, indicamos el
-	// error.
-	//
+	// Se recorre la tabla de opciones, y se busca la entrada larga que se corresponda 
+  // con la opción de línea de comandos. De no encontrarse, se indica el error correspondiente.
+	
 	for (option_t *op = option_table; op->long_name != 0; ++op) {
 		if (string(opt) == string(op->long_name)) {
-			// Marcamos esta opción como usada en
-			// forma explícita, para evitar tener
-			// que inicializarla con el valor por
-			// defecto.
-			//
+			// Se marca esta opción como usada en forma explícita, para evitar tener que inicializarla con el valor por defecto.
+
 			op->flags |= OPT_SEEN;
 
 			if (op->has_arg) {
 				if (arg == 0) { // Verificamos que se provea un argumento
-					cerr << "Option requires argument: "<< "--"<< opt<< "\n";
+					cerr << "La opción requiere el argumento: "<< "--"<< opt<< "\n";
 					exit(1);
 				}
 				op->parse(string(arg));
@@ -225,7 +208,7 @@ int cmdline::do_long_opt(const char *opt, const char *arg) {
 		}
 	}
 	// Error: opción no reconocida.
-	cerr << "Unknown option: "<< "--"<< opt<< "."<< endl;
+	cerr << "Opción desconocida: "<< "--"<< opt<< "."<< endl;
 	exit(1);
 	return -1;
 }
@@ -239,7 +222,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 			op->flags |= OPT_SEEN;
 			if (op->has_arg) {
 				if (arg == 0) {	
-					cerr << "Option requires argument: "<< "-"<< opt<< "\n";
+					cerr << "La opción requiere el argumento: "<< "-"<< opt<< "\n";
 					exit(1);
 				}
 				op->parse(string(arg));
@@ -250,7 +233,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 			}
 		}
 	}
-	cerr << "Unknown option: "<< "-"<< opt << "." << endl;
+	cerr << "Opción desconocida: "<< "-"<< opt << "." << endl;
 	exit(1);
 	return -1;
 }
@@ -259,9 +242,8 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 // *******************************FUNCIONES**********************************//
 
 
-/*Esta funcion lee del archivo de input y llena la imagen VACIA que
-se le pase como argumento. Se supone que hay un solo comentario y
-el pgm esta bien organizado*/
+// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pase como argumento. 
+
 bool read_pgm(image & img_arg){
   int aux_int, aux_size[2], aux_greyscale;
   int i=0;
@@ -269,85 +251,79 @@ bool read_pgm(image & img_arg){
   string in_string, temp;		
 
 
-  getline(*iss, in_string); // Identificador
+  getline(*iss, in_string); // Identificador PGM.
 
   if (in_string[0] == PGM_IDENTIFIER[0]){
   	if (in_string[1] != PGM_IDENTIFIER[1]){
-    	cerr<< "No es PGM" <<endl;
+    	cerr<< "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
     	exit(1);
   	}
 	}
 	else {cerr<< "No es PGM" <<endl; exit(1);}
 
-  getline(*iss, in_string);   // Supongo que tiene un solo comentario, lo salteo
-  if (in_string[0] == SKIP_LINE_IDENTIFIER){
-    //cout << "Encontro un comentario" << endl; // Lo salteo
-    getline(*iss, in_string); // Dimsensiones
-
+  getline(*iss, in_string);
+  if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario.
+    getline(*iss, in_string); // Se leen las dimensiones de la matriz.
   }
 
-  
   stringstream ss (in_string);
   while(!ss.eof()){
       ss >> temp;
-      if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo
+      if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
         aux_size[i] = aux_int;
         i++;
       }
       temp = "";
   }
   
-  img_arg.set_width(aux_size[0]);
-  img_arg.set_height(aux_size[1]);
+  img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
+  img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
   i=0;
   
 
-  getline(*iss, in_string); // Escala de grises
+  getline(*iss, in_string);
   aux_greyscale = stoi(in_string);
-  img_arg.set_greyscale(aux_greyscale);
+  img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.
 
 
-  /*Crea la matriz de enteros y los llena con ceros. Hay que
-  tener en cuenta q la matriz va a sedr cuadrada por eso se pide
-  dos veces de dimension "max"*/
+  // Crea la matriz de enteros y los llena con ceros.
+  // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max".
+
   aux_matrix = new int*[aux_size[1]]; 
   for (int i = 0; i < aux_size[1]; i++){  
       aux_matrix[i] = new int[aux_size[0]]; 
   }
 
-  for (int i = 0; i < aux_size[1]; i++)
-  {
-    for (int j = 0; j < aux_size[0]; j++)
-    {
+  for (int i = 0; i < aux_size[1]; i++){
+    for (int j = 0; j < aux_size[0]; j++){
     	*iss >> aux_int;
-    	if (!(iss->eof()))
-    	{
+    	if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
     		aux_matrix[i][j] = aux_int;
-    		//cout<<aux_matrix[i][j];
+
     	}else{
-    		cout<<"Error Bro"<<endl;
-    		for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+    		cerr<<"Error. Hay menos elementos."<<endl; // En caso que haya menos elementos,
+    		for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
         	delete[] aux_matrix[i];
   			delete[] aux_matrix;
     		return false;
     	}   
     }
-    //cout<<endl;
   }
-  *iss >> aux_int;
-  if (!iss->eof())
-  {
-  	cout<<"Error Brocoli"<<endl;
-  	for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+
+  *iss >> aux_int; 
+
+  if (!iss->eof()){ // Se evalúa si el siguiente elemento es eof.
+  	cerr<<"Error. Hay más elementos."<<endl; // En caso que haya más elementos,
+  	for (int i = 0; i<aux_size[1]; i++)      // Se destruye matriz auxiliar en caso de error
       delete[] aux_matrix[i];
   	delete[] aux_matrix;
   	return false;
   }
 
 
-  img_arg.fill_matrix(aux_matrix);  // Lleno la matriz de imagen
+  img_arg.fill_matrix(aux_matrix);  // Se llena la matriz de imagen
  
-  for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+  for (int i = 0; i<aux_size[1]; i++)   // Se destruye la matriz auxiliar              
         delete[] aux_matrix[i];
   delete[] aux_matrix;
   return true;
@@ -372,13 +348,11 @@ void generate_matrix_c(double max, complejo *** matrix){
     for (int i = 0; i < max; i++){    	
       for (int j = 0; j < max; j++){  
         (*matrix)[i][j]=complejo(aux_real,aux_imag);
-        aux_real=aux_real+paso;			// Se ajusta el valor para la proxima posicion
+        aux_real=aux_real+paso; // Se ajusta el valor para la proxima posicion
         }
-        aux_real=-1;					// Se reinicia el valor del x ya que recorre por filas
-        aux_imag=aux_imag-paso;			// Se ajusta el valor para la proxima posicion
-      
+        aux_real=-1;					  // Se reinicia el valor del x ya que recorre por filas
+        aux_imag=aux_imag-paso; // Se ajusta el valor para la proxima posicion
     }
-
 }
 
 
@@ -486,7 +460,6 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
       	}
     	}
   	}
-      
   }
   
   for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
@@ -494,7 +467,5 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
         delete[] complex_matrix[i];
       }
     }
-  
   delete[] complex_matrix;
-
 } 
