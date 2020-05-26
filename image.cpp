@@ -8,6 +8,7 @@ image::image(){
   width=0;    //ancho
   height=0;    // alto
   greyscale=0;
+  matrix=NULL;
 }
 
 // Constructor por parametro
@@ -98,7 +99,7 @@ int image::get_matrix_value(const int & i,const int & j){
   return matrix[i][j];
 }
 
-void image::printMatrix(){
+void image::print_matrix(){
   int max=0;
 
   if(width<height){max = height;} else{max = width;}

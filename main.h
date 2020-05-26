@@ -37,7 +37,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 
-void read_pgm(image &);
+bool read_pgm(image &);
 void generate_matrix_c(double, complejo ***);
 int * binary_search(const complejo, complejo ***, int [2], int [2]);
 void map_image(image &, image &, complejo (complejo::*function_pointer)(void));

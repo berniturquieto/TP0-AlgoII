@@ -34,7 +34,7 @@ class image{
     int get_matrix_value(const int &,const int &);
 
     // Printers
-    void printMatrix();
+    void print_matrix();
     void print_image(ostream*);
 
     void fill_matrix(int **);

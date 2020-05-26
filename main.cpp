@@ -40,18 +40,21 @@ int main(int argc, char * const argv[]){
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
 
-	read_pgm(input_image);
-
+	if(!read_pgm(input_image)){
+		cerr<<"Fallo el archivo"<<endl;
+		return 1;
+	}
+	
 	image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
 	switch(chosen_function){  
 		case z:                  
 			input_image.print_image(oss);
 			return 0;
-			break;
+		break;
 		case expz: 
-      		map_image(input_image, output_image, &complejo::exponencial);
-      		break;
+      map_image(input_image, output_image, &complejo::exponencial);
+    break;
 		case conjugar:
 			map_image(input_image, output_image, &complejo::conjugar);
 			break;
@@ -69,7 +72,7 @@ int main(int argc, char * const argv[]){
 		break;
 		default: 
 			cerr<< "Error en seleccion de funcion" << endl;
-			exit(1);
+			return 1;
 	}
 
 	output_image.print_image(oss);
@@ -259,7 +262,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 /*Esta funcion lee del archivo de input y llena la imagen VACIA que
 se le pase como argumento. Se supone que hay un solo comentario y
 el pgm esta bien organizado*/
-void read_pgm(image & img_arg){
+bool read_pgm(image & img_arg){
   int aux_int, aux_size[2], aux_greyscale;
   int i=0;
   int ** aux_matrix;
@@ -316,9 +319,29 @@ void read_pgm(image & img_arg){
   {
     for (int j = 0; j < aux_size[0]; j++)
     {
-      *iss >> aux_int;
-      aux_matrix[i][j] = aux_int;
+    	*iss >> aux_int;
+    	if (!(iss->eof()))
+    	{
+    		aux_matrix[i][j] = aux_int;
+    		//cout<<aux_matrix[i][j];
+    	}else{
+    		cout<<"Error Bro"<<endl;
+    		for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+        	delete[] aux_matrix[i];
+  			delete[] aux_matrix;
+    		return false;
+    	}   
     }
+    //cout<<endl;
+  }
+  *iss >> aux_int;
+  if (!iss->eof())
+  {
+  	cout<<"Error Brocoli"<<endl;
+  	for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
+      delete[] aux_matrix[i];
+  	delete[] aux_matrix;
+  	return false;
   }
 
 
@@ -327,6 +350,7 @@ void read_pgm(image & img_arg){
   for (int i = 0; i<aux_size[1]; i++)   //Destruyo matriz auxiliar              
         delete[] aux_matrix[i];
   delete[] aux_matrix;
+  return true;
 }
 
 
@@ -360,15 +384,14 @@ void generate_matrix_c(double max, complejo *** matrix){
 
 int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fin_lim[2]){
 
-  	// Esta funcion realiza la busqueda del complejo c en la matriz matrix recibida por puntero a traves del metodo binario de busqueda de
-  	// forma recursiva. in_lim y fin_lim son arreglos de dos posiciones, en la primer posicion de cada uno se encuentra el valor inicial y final
-  	// para las filas y en la segunda los mismos pero para las columnas.
-  	// El valor que retorna es la posición de la matiz de donde se encuentra el valor c o el mas proximo a este.
+  // Esta funcion realiza la busqueda del complejo c en la matriz matrix recibida por puntero a traves del metodo binario de busqueda de
+  // forma recursiva. in_lim y fin_lim son arreglos de dos posiciones, en la primer posicion de cada uno se encuentra el valor inicial y final
+  // para las filas y en la segunda los mismos pero para las columnas.
+  // El valor que retorna es la posición de la matiz de donde se encuentra el valor c o el mas proximo a este.
 	// Se prueba que los limites iniciales sean menores a los finales, de no ser asi se devuleve NULL
   if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
     return NULL;
   }
-
 
   // Caso base:
   // Cuando se llega a una porcion de matriz de 2x2 se fija cual de los cuatro valores es el más proximo a c y ajusta los limites para 
@@ -451,10 +474,16 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
     	 	if (pos !=NULL){ 		// Si se detecta un error se termina el progrma
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
         		destino.set_matrix_value(i,j,aux_color);
-      		}
-      		else {
-      			exit(1);
-      		}
+      	}
+      	else {
+      		cerr<<"Error en busqueda binaria"<<endl;
+      		for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
+      			if (complex_matrix[i]){          
+        			delete[] complex_matrix[i];
+      			}
+    			}
+  				delete[] complex_matrix;
+      	}
     	}
   	}
       
