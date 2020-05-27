@@ -96,7 +96,7 @@ static void opt_input(string const &arg){
 	}
 	// Verificamos que el stream este OK.
 	if (!iss->good()) {
-		cerr << "cannot open "<< arg<< "."<< endl;
+		cerr << "No se puede abrir el archivo de entrada: "<< arg<< "."<< endl;
 		exit(1);
 	}
 }
@@ -110,7 +110,7 @@ static void opt_output(string const &arg){
 		oss = &ofs;
 	}
 	if (!oss->good()) {
-		cerr << "cannot open "<< arg<< "."<< endl;
+		cerr << "No se puede abrir el archivo de salida: "<< arg<< "."<< endl;
 		exit(1);
 	}
 }
@@ -320,7 +320,7 @@ bool read_pgm(image & img_arg){
     		
 
     	}else{
-    		cerr<<"Error. Hay menos elementos."<<endl; // En caso que haya menos elementos,
+    		cerr<<"Error. Cantidad insuficiente de elementos."<<endl; // En caso que haya menos elementos,
     		for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
         	delete[] aux_matrix[i];
   			delete[] aux_matrix;
@@ -332,7 +332,7 @@ bool read_pgm(image & img_arg){
   *iss >> aux_int; 
 
   if (!iss->eof()){ // Se evalúa si el siguiente elemento es eof.
-  	cerr<<"Error. Hay más elementos."<<endl; // En caso que haya más elementos,
+  	cerr<<"Error. Cantidad excesiva de elementos."<<endl; // En caso que haya más elementos,
   	for (int i = 0; i<aux_size[1]; i++)      // Se destruye matriz auxiliar en caso de error
       delete[] aux_matrix[i];
   	delete[] aux_matrix;
