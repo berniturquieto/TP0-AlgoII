@@ -476,7 +476,7 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
         		destino.set_matrix_value(i,j,aux_color);
       	}
       	else {
-      		cerr<<"Error en busqueda binaria"<<endl;
+      		cerr<<"Error en busqueda binaria."<<endl;
       		for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
       			if (complex_matrix[i]){          
         			delete[] complex_matrix[i];
