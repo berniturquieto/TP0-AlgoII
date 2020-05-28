@@ -32,10 +32,7 @@ image::image(const int w, const int h, const int gs){
   }
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1e96002f070aacdf70d1e2c9cdbfcf2a76a3a5ef
 // Destructor
 image::~image(){ 
 
