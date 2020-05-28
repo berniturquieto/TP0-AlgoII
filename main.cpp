@@ -242,7 +242,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 // *******************************FUNCIONES**********************************//
 
 
-// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pase como argumento. 
+// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pasa como argumento. 
 
 bool read_pgm(image & img_arg){
   int aux_int, aux_size[2], aux_greyscale;
@@ -266,34 +266,35 @@ bool read_pgm(image & img_arg){
     getline(*iss, in_string); // Se leen las dimensiones de la matriz.
   }
 
-  stringstream ss (in_string);
-  while(!ss.eof()){
-  	if (i==2)
-  	{
-  	cerr<<"Error de formato."<<endl;
-  	return false;
+  stringstream ss (in_string);  
+  
+	while (i < 2 && !ss.eof()){
+  	ss >> temp;
+  	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
+  	  aux_size[i] = aux_int;
+  	  i++;
   	}
-    ss >> temp;
-    if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
-      aux_size[i] = aux_int;
-      i++;
-    }
+  	temp = "";
+	}
+	if (i == 1){
+		cout<< "Error en el formato, falta altura"<<endl;
+		return false;
+	}
 
-      temp = "";
+	ss >> temp;
+ 	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, es un error.
+ 		cout<< "Error en el formato un dato de mas"<<endl;
+ 		return false;
   }
-
-
 
   
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
   img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
-  i=0;
   
 
   getline(*iss, in_string);
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.
-
 
   // Crea la matriz de enteros y los llena con ceros.
   // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max".
@@ -457,21 +458,21 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
     for (int j = 0; j < destino.get_max_dim(); j++)
     {
     	// Se inicializan los limites para la busqueda binaria
-      	in_lim[0]=0;
-      	in_lim[1]=0;
-      	fin_lim[0]=max-1; 
-      	fin_lim[1]=max-1;
+      in_lim[0]=0;
+      in_lim[1]=0;
+      fin_lim[0]=max-1; 
+      fin_lim[1]=max-1;
 
-      	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
-      	aux = complex_matrix[i][j];
+      // Se guarda el valor de la matriz de complejos para luego realizar la transformacion
+      aux = complex_matrix[i][j];
 
-      	aux = (aux.*function_pointer)();
+      aux = (aux.*function_pointer)();
 
   		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
   		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
     		pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
-    	 	if (pos !=NULL){ 		// Si se detecta un error se termina el progrma
+    	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
         		destino.set_matrix_value(i,j,aux_color);
       	}
