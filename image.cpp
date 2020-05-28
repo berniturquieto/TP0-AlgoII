@@ -32,23 +32,21 @@ image::image(const int w, const int h, const int gs){
   }
 }
 
-// CONSTRUCTOR COPIA HACEMOS?
-
-
 // Destructor
 image::~image(){ 
-  //int max = 0;
 
   int max = this->get_max_dim();
 
   if (matrix){                
-    for (int i = 0; i<max; i++){    
-      //if (matrix[i]){          
+    for (int i = 0; i<max; i++){ 
+    cout << "asd" << endl;   
+//      if (matrix[i]){          
         delete[] matrix[i]; // Libera la memoria pedida para crear la matriz
-      //}
+ //     }
     }
   }
   delete[] matrix;
+  cout << "todo joya" << endl;
 }
 
 // Setter y getters
