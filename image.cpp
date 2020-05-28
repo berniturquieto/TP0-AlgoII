@@ -5,10 +5,10 @@ using namespace std;
 
 // Constructor por defecto
 image::image(){
-  width=0;    //ancho
-  height=0;    // alto
-  greyscale=0;
-  matrix=NULL;
+  width=0;      // Ancho
+  height=0;     // Alto
+  greyscale=0;  // Escala de grises
+  matrix=NULL;  // Matriz
 }
 
 // Constructor por parametro
@@ -32,17 +32,20 @@ image::image(const int w, const int h, const int gs){
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1e96002f070aacdf70d1e2c9cdbfcf2a76a3a5ef
 // Destructor
 image::~image(){ 
-  //int max = 0;
 
   int max = this->get_max_dim();
 
   if (matrix){                
     for (int i = 0; i<max; i++){    
-      //if (matrix[i]){          
+      if (matrix[i]){          
         delete[] matrix[i]; // Libera la memoria pedida para crear la matriz
-      //}
+      }
     }
   }
   delete[] matrix;
@@ -133,7 +136,7 @@ void image::print_image(ostream *os){ // Imprime la imagen por ostrem
   }
 }
 
-// Este método pide memoria y llena la matriz pasada como argumento. La matriz ya tiene las dimensiones seteadas.
+// Este método pide memoria y llena la matriz pasada como argumento.
 void image::fill_matrix(int ** matrix){
 
   int max=0;
@@ -174,4 +177,6 @@ void image::fill_matrix(int ** matrix){
       } 
     }
   }
+  height = max;
+  width = max;
 }
