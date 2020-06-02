@@ -15,6 +15,10 @@
 #define FUNCTION_Z "z"
 #define FUNCTION_EXPZ "expz"
 #define FUNCTION_CONJUGAR "conjugar"
+#define FUNCTION_INVERSA "inversa"
+#define FUNCTION_LOGARITMO "log"
+#define FUNCTION_SENO "sin"
+#define FUNCTION_POW "pow"
 #define NUL '\0'
 
 struct option_t {
@@ -34,8 +38,8 @@ static void opt_function(string const &);
 static void opt_help(string const &);
 
 void read_pgm(image &);
-complejo ** generate_matrix_c(double);
-int * binary_search(complejo, complejo **, int [2], int [2]);
+void generate_matrix_c(double, complejo ***);
+int * binary_search(const complejo, complejo ***, int [2], int [2]);
 void map_image(image &, image &, complejo (complejo::*function_pointer)(void));
 
 

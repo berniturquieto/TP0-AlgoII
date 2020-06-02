@@ -152,3 +152,48 @@ complejo complejo::conjugar (){
 	aux.img = -(this->img);
 	return aux;
 }
+
+// INVERSA
+complejo complejo::inversa (){
+	complejo aux;
+	aux=this->conjugar();
+	aux.real=aux.real/(aux.get_modulo());
+	aux.img=aux.img/(aux.get_modulo());
+	return aux;
+}
+
+// LOGARITMO
+complejo complejo::logaritmo(){
+
+  complejo aux;
+
+  double modulo = this->get_modulo();
+
+  aux.real = log(modulo);
+  aux.img = atan2(this->img,this->real);
+
+  return aux;
+}
+
+// SENO
+complejo complejo::seno(){
+
+  complejo aux;
+
+  aux.real = sin(real)*cosh(img);
+  aux.img = cos(real)*sinh(img);
+
+  return aux;
+}
+
+// CUADRADO
+
+complejo complejo::pow2(){
+
+	complejo aux;
+
+  	aux.real = real*real-img*img;
+  	aux.img = real*img*2;
+
+ 	return aux;
+}

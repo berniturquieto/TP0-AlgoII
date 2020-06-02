@@ -29,11 +29,7 @@ static option_t options[] = {
 	{0, },
 };
 
-<<<<<<< HEAD
-enum functions {z, expz, conjugar};
-=======
 enum functions {z, expz, conjugar, inversa, logaritmo, seno,pow2};
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 static functions chosen_function = z;
 
 // **********************************MAIN**********************************//
@@ -51,10 +47,7 @@ int main(int argc, char * const argv[]){
 	switch(chosen_function){  
 		case z:                  
 			input_image.print_image(oss);
-<<<<<<< HEAD
-=======
 			return 0;
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 			break;
 		case expz: 
       		map_image(input_image, output_image, &complejo::exponencial);
@@ -62,8 +55,6 @@ int main(int argc, char * const argv[]){
 		case conjugar:
 			map_image(input_image, output_image, &complejo::conjugar);
 			break;
-<<<<<<< HEAD
-=======
 		case inversa:
 			map_image(input_image, output_image, &complejo::inversa);
 		break;
@@ -76,7 +67,6 @@ int main(int argc, char * const argv[]){
 		case pow2:
 			map_image(input_image, output_image, &complejo::pow2);
 		break;
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 		default: 
 			cerr<< "Error en seleccion de funcion" << endl;
 			exit(1);
@@ -124,13 +114,10 @@ static void opt_function(string const &arg){
 
   else if (arg == FUNCTION_EXPZ) {chosen_function = expz; }
   else if (arg == FUNCTION_CONJUGAR) {chosen_function = conjugar; }
-<<<<<<< HEAD
-=======
   else if (arg == FUNCTION_INVERSA) {chosen_function = inversa; } 
   else if (arg == FUNCTION_LOGARITMO) {chosen_function = logaritmo; }
   else if (arg == FUNCTION_SENO) {chosen_function = seno; }
   else if (arg == FUNCTION_POW) {chosen_function = pow2; }
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
   else {
     cerr << "Funcion invalida" << endl;
     exit(1);
@@ -153,36 +140,12 @@ cmdline::cmdline(option_t *table) : option_table(table){
 
 	option_table = table;
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:main.cpp
-=======
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 	Siendo "option_table" un atributo de la clase cmdline
 	y table un puntero a objeto o struct de "option_t".
 	
 	Se estaría contruyendo una instancia de la clase cmdline
 	cargandole los datos que se hayan en table (la table con
 	las opciones, ver el código en main.cc)
-<<<<<<< HEAD
-========
-  image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
-
-  switch(chosen_function){  
-    case z:                  
-      output_image=input_image;
-      break;
-    case expz: 
-      map_image(input_image, output_image, &complejo::exponencial);
-      break;
-    case conjugar:
-      map_image(input_image, output_image, &complejo::conjugar);
-      break;
-    default: 
-      cerr<< "Error en seleccion de funcion" << endl;
-  }
->>>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c:main2.cpp
-=======
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 
 	*/
 }
@@ -364,50 +327,25 @@ void read_pgm(image & img_arg){
 }
 
 
-<<<<<<< HEAD
-complejo ** generate_matrix_c(double max){
-  complejo ** matrix;
-  
-  matrix = new complejo*[(int)max]; // Pido memoria para la matriz
-  for (int i = 0; i < max; i++){  
-      matrix[i] = new complejo[(int)max];
-    }
-=======
 void generate_matrix_c(double max, complejo *** matrix){
   
   (*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
   for (int i = 0; i < max; i++){  
       (*matrix)[i] = new complejo[(int)max];
    }
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 
   double paso=2/(max-1);
   double aux_real=-1;
   double aux_imag=1;
     for (int i = 0; i < max; i++){    // raws// Rellena la matris con color negro 
       for (int j = 0; j < max; j++){  // co
-<<<<<<< HEAD
-        matrix[i][j]=complejo(aux_real,aux_imag);
-=======
         (*matrix)[i][j]=complejo(aux_real,aux_imag);
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
         aux_real=aux_real+paso;
         }
         aux_real=-1;
         aux_imag=aux_imag-paso;
       
     }
-<<<<<<< HEAD
-    return matrix;
-}
-
-
-int * binary_search(complejo c, complejo ** matrix, int in_lim[2], int fin_lim[2]){//ini [x0,y0] fin [xf,yf]
-  
-  if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
-    return NULL;
-  }
-=======
 
 }
 
@@ -423,20 +361,11 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
   }
   // Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   // sino retorna NULL
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 
   if(abs(c.get_real()) > 1 || abs(c.get_img()) > 1){
     return NULL;
   }
 
-<<<<<<< HEAD
-  if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
-
-    if (abs(c.get_real() - (matrix[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - (matrix[fin_lim[1]][fin_lim[0]]).get_real())){
-      in_lim[0] = fin_lim[0];
-    }
-    if (abs(c.get_img() - (matrix[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - (matrix[fin_lim[1]][fin_lim[0]]).get_img())){
-=======
   // Caso base:
   // En este c
   if ((fin_lim[0]-in_lim[0]) == 1 && (fin_lim[1]-in_lim[1]) == 1){
@@ -445,7 +374,6 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
       in_lim[0] = fin_lim[0];
     }
     if (abs(c.get_img() - ((*matrix)[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_img())){
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
       in_lim[1] = fin_lim[1];
     }
     return in_lim;
@@ -454,15 +382,9 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
   int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
   int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
 
-<<<<<<< HEAD
-  if (c.get_real()>= (matrix[medio_y][medio_x]).get_real()){
-    in_lim[0] = medio_x;
-    if (c.get_img()>= (matrix[medio_y][medio_x]).get_img()){
-=======
   if (c.get_real()>= ((*matrix)[medio_y][medio_x]).get_real()){
     in_lim[0] = medio_x;
     if (c.get_img()>= ((*matrix)[medio_y][medio_x]).get_img()){
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -472,11 +394,7 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
 
   }else{
     fin_lim[0] = medio_x;
-<<<<<<< HEAD
-    if (c.get_img()>=(matrix[medio_y][medio_x]).get_img()){
-=======
     if (c.get_img()>=((*matrix)[medio_y][medio_x]).get_img()){
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
       fin_lim[1] = medio_y;
       return binary_search(c, matrix, in_lim, fin_lim);
     }else{
@@ -497,11 +415,7 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
   complejo aux;
   complejo ** complex_matrix;
 
-<<<<<<< HEAD
-  complex_matrix = generate_matrix_c(original.get_max_dim());
-=======
   generate_matrix_c(original.get_max_dim(), &complex_matrix);
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 
   in_lim[0]=0;
   in_lim[1]=0;
@@ -520,19 +434,13 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
 
       aux = (aux.*function_pointer)();
 
-<<<<<<< HEAD
-      pos = binary_search(aux,complex_matrix,in_lim,fin_lim);
-=======
       pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
       if (pos !=NULL){
         aux_color = original.get_matrix_value(pos[1],pos[0]);
         destino.set_matrix_value(i,j,aux_color);
       }
     }
   }
-<<<<<<< HEAD
-=======
   
   for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
       if (complex_matrix[i]){          
@@ -541,6 +449,5 @@ void map_image(image & original, image & destino, complejo(complejo::*function_p
     }
   
   delete[] complex_matrix;
->>>>>>> 55b8dc6f9be4d9ac84fbec3bcbc98299db7f063c
 
 } 
