@@ -15,27 +15,31 @@ class image{
 
 	public:
 
-  // Contructores
-	image(); // Por defecto
-	image(const int, const int, const int);  // Constructor por argumento
-	~image();  // Destructor
-	
-	// Setters y getters
-  void set_width(const int);
- 	int get_width();
-  void set_height(const int);
-  int get_height();
-  void set_greyscale(const int );
-  int get_greyscale();
-  int get_max_dim();
-  void set_matrix_value(const int &,const int &,const int &);
-  int get_matrix_value(const int &,const int &);
+    // Contructores
+  	image(); // Por defecto
+  	image(const int, const int, const int);  // Constructor por argument
+    //image(); // Constructor copia
+  	~image();  // Destructor
+  	
 
-  // Printers
-  void print_matrix();
-  void print_image(ostream*);
+  	// Setters y getters
+    void set_width(const int);
+   	int get_width();
+    void set_height(const int);
+    int get_height();
+    void set_greyscale(const int );
+    int get_greyscale();
+    int get_max_dim();
+    void set_matrix_value(const int &,const int &,const int &);
+    int get_matrix_value(const int &,const int &);
 
-  void fill_matrix(int **);
+    // Printers
+    void printMatrix();
+    void print_image(ostream*);
+
+    void fill_matrix(int **);
 };
+
+
 
 #endif

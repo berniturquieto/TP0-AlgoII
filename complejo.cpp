@@ -26,28 +26,28 @@ complejo::complejo(const complejo & arg_complejo){
 complejo::~complejo(){}
 
 // Setters
-void complejo::set_real(const double arg_real){ // Setea la parte real
+void complejo::set_real(const double arg_real){
 	real = arg_real;	
 }
 
-void complejo::set_img(const double arg_img){ // Setea la parte imaginaria
+void complejo::set_img(const double arg_img){
 	img = arg_img;
 }
 
 // Getters
-double complejo::get_real(void) const{	// Obtiene la parte real
+double complejo::get_real(void) const{
 	return real;
 }
 
-double complejo::get_img(void) const{	// Obtiene la parte imaginaria
+double complejo::get_img(void) const{
 	return img;
 }
 
-double complejo::get_modulo(){ // Obtiene le módulo
+double complejo::get_modulo(){
 	return sqrt((this->real)*(this->real) + (this->img)*(this->img));
 }
 
-double complejo::get_angulo(){	// Obtiene el angulo
+double complejo::get_angulo(){
 	return atan((this->img)/(this->real));
 }
 
@@ -56,7 +56,7 @@ void complejo::print_complejo(){
 	cout <<"(" << real << "," << img << ")";
 }
 
-// Operador SUMA con un complejo
+// Operador SUMA
 complejo complejo::operator + (const complejo & complejo_a_sumar){
 	complejo aux;
 	aux.real = (this->real) + complejo_a_sumar.real;
@@ -64,7 +64,6 @@ complejo complejo::operator + (const complejo & complejo_a_sumar){
 	return aux;
 }
 
-// Operador SUMA con un escalar
 complejo complejo::operator + (const double & double_a_sumar){
 	complejo aux;
 	aux.real = (this->real) + double_a_sumar;
@@ -72,7 +71,7 @@ complejo complejo::operator + (const double & double_a_sumar){
 	return aux;
 }
 
-// Operador RESTA con un complejo
+// Operador RESTA
 complejo complejo::operator - (const complejo & complejo_a_restar){
 	complejo aux;
 	aux.real = (this->real) - complejo_a_restar.real;
@@ -80,7 +79,7 @@ complejo complejo::operator - (const complejo & complejo_a_restar){
 	return aux;
 }
 
-// Operador RESTA con un escalar
+// Operador RESTA
 complejo complejo::operator - (const double & double_a_restar){
 	complejo aux;
 	aux.real = (this->real) - double_a_restar;
@@ -88,7 +87,7 @@ complejo complejo::operator - (const double & double_a_restar){
 	return aux;
 }
 
-// Operador MULTIPLICACION por un complejo
+// Operador MULTIPLICACION
 complejo complejo::operator * (const complejo & A){
 	complejo aux;
 	aux.real = (this->real * A.real) - (this->img * A.img);
@@ -96,7 +95,6 @@ complejo complejo::operator * (const complejo & A){
 	return aux;
 }
 
-// Operador MULTIPLICACION por un escalar
 complejo complejo::operator * (const double & A){
 	complejo aux;
 	aux.real = (this->real * A);
@@ -104,7 +102,7 @@ complejo complejo::operator * (const double & A){
 	return aux;
 }
 
-// Operador DIVISION por un complejo
+// Operador DIVISION
 complejo complejo::operator / (const complejo & divisor){
 	complejo aux;
 	double a = this->real;
@@ -117,7 +115,6 @@ complejo complejo::operator / (const complejo & divisor){
 	return aux;
 }
 
-// Operador DIVISION por un escalar
 complejo complejo::operator / (const double & divisor){
 	complejo aux;
 	aux.real = this->real / divisor;
