@@ -6,20 +6,27 @@
 # Turquieto, Bernardo               98036     bturquieto@fi.uba.ar  #
 #####################################################################
 
-Prueba de imagen horizontal
-img2_totem_horizontal.pgm
+Para compilar el programa se debe correr la linea "make all".
+Luego para ejecutar el programa se lo debe invocar como ./function_image, con los argumentos correspondientes
 
-Prueba de imágen vertical
-img5_mother_vertical.pgm
+En la carpeta imagenes se encuentran las imagenes originales que se 
+pueden observar en el informe.
+
 mona_lisa.pgm
+mother.pgm
+pepper.pgm
+totem.pgm
+space.pgm
+estres_test.pgm
 
-Prueba de imagen cuadrada
-img6_pepper_cuadrada.pgm
+Para realizar las pruebas se utilizaron las imagenes siguientes:
 
-Prueba de estrés
-img2_fractal_tree.pgm
+pepper_mal_escala.pgm 		(Hay valores que superan la escala de grises)
+pepper_valor_negativo.pgm	(Hay valores fuera de la escala de grises)
+pepper_mas_datos.pgm 		(Hay mas datos de los especificados)
+pepper_menos_datos.pgm		(Hay menos datos de los especificados)
 
-img2_totem_horizontal
-img5_mother_vertical
-img6_pepper_cuadrada
-mona_lisa
+Para realizar el test de estres se utilizo la siguente imagen:
+
+estres_test.pgm
+
